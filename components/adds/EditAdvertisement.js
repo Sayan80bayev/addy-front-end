@@ -27,12 +27,19 @@ function EditAdvertisement() {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const validImageExtensions = [".jpg", ".jpeg", ".png"];
 
-    const validImageTypes = ["image/jpeg", "image/jpg", "image/png"];
-    const filteredImages = imageFiles.filter((file) =>
-      validImageTypes.includes(file.type)
-    );
+    const filteredImages = files.filter((file) => {
+      if (!file.type || file.type === "") {
+        file.type = "image/png"; // Default to PNG if type is empty
+      }
+
+      const extension = file.name.toLowerCase().slice(-4);
+      return (
+        validImageExtensions.includes(extension) &&
+        file.type.startsWith("image/")
+      );
+    });
 
     if (filteredImages.length > 0) {
       setImages((prevImages) => [...prevImages, ...filteredImages]);
@@ -64,11 +71,9 @@ function EditAdvertisement() {
       type: "application/json",
     });
     formDataToSend.append("advertisement", advertisementBlob);
-    formDataToSend.append("files", new Blob([]));
     for (const image of images) {
       formDataToSend.append("files", image);
     }
-    console.log(formDataToSend.get("files"));
 
     try {
       const response = await axios.put(
@@ -98,14 +103,26 @@ function EditAdvertisement() {
           price: adResponse.data.price.toString() || "",
           category_id: adResponse.data.category.category_id.toString() || "",
         };
-        const decodedImages = adResponse.data.images.map((imageData) => {
-          const img = new Image();
-          img.src = "data:image/jpeg;base64," + imageData.imageData;
-          return img;
+        const decodedFiles = adResponse.data.images.map((imageData) => {
+          // Assuming imageData.imageData is base64 encoded image data
+          const byteCharacters = atob(imageData.imageData);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+
+          // Set the type of the file to 'image/png' or your appropriate image type
+          const file = new File([byteArray], imageData.fileName, {
+            type: "image/png", // or set it to the appropriate image type based on your data
+          });
+
+          return file;
         });
 
-        // Update the state variable with the decoded images
-        setImages(decodedImages);
+        // Update the state variable with the decoded files
+        setImages(decodedFiles);
+
         setFormData(formDataFromObject);
         setCategories(data);
       } catch (error) {
@@ -115,7 +132,7 @@ function EditAdvertisement() {
 
     fetchData();
   }, []);
-
+  console.log(images);
   const imageIconPath = process.env.PUBLIC_URL + "/plus-svgrepo-com.png";
   if (!localStorage.getItem("authToken")) {
     return navigate("/login", {

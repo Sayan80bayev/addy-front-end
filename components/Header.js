@@ -1,10 +1,18 @@
-import React from "react";
-
-const handleLogout = () => {
-  localStorage.removeItem("authToken");
-};
+import React, { useEffect } from "react";
+import { useState } from "react";
 
 const Header = () => {
+  const [token, setToken] = useState("");
+  console.log(token);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("authToken"));
+  }, [localStorage.getItem("authToken")]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setToken(null);
+  };
   return (
     <header>
       <nav>
@@ -13,9 +21,11 @@ const Header = () => {
           <a href="/">My Website</a>
           <a href="/index">Home</a>
           <a href="/newAdd">New add</a>
-          <a href="/login">
-            <button onClick={handleLogout}>New add</button>
-          </a>
+          {token && (
+            <button className="btn-no-style" onClick={handleLogout}>
+              <a href="/login">Logout</a>
+            </button>
+          )}
         </div>
       </nav>
     </header>

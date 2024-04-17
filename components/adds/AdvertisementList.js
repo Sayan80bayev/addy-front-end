@@ -26,7 +26,7 @@ function AdvertisementList() {
       {loading && <LoadingIcon />}
       <div className="ctn">
         {advertisements.map((advertisement) => (
-          <div key={advertisement.id}>
+          <div key={advertisement.id} className="card-ctn">
             <div className="card">
               {/* Check if there are images */}
               {advertisement.images.length > 0 ? (

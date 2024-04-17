@@ -99,7 +99,7 @@ input[type="text"] {
 .search-inp{
   border: none;
   border-right: #262622 solid 1px ;
-  width: 50%;
+  width: 75%;
 }
 :focus{
   outline: none;
@@ -159,10 +159,10 @@ select option {
 }
 .ctn{
   display: flex;
-  gap: 5%;
+  gap: 6.5%;
   flex-wrap: wrap;
 }
-.ctn > div{
+.ctn > .card-ctn{
   width: 20%;
 }
 a{
@@ -218,4 +218,28 @@ a{
 /* Customize scrollbar corner */
 ::-webkit-scrollbar-corner {
   background-color: #262622; /* Color of the scrollbar corner */
+}
+.slide{
+  background: rgba(200, 200, 200, 0.5); /* Change 0.5 to the desired opacity value between 0 (completely transparent) and 1 (completely opaque) */
+  overflow: hidden;
+  height: 500px;
+  width: 800px;
+  display: flex;
+  align-items: center;
+}
+.carousel-inner{
+  display: flex;
+  /* width: 700px; */
+  height: 500px;
+  align-items: center;
+
+}
+.carousel-item{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);  
+  height: max-content;
+}
+.btn-no-style{
+  background-color: transparent;
+  color: white;
+  border: none;
 }

@@ -4,6 +4,8 @@ import "../style/FullAdd.css";
 import Footer from "../Footer";
 import { jwtDecode } from "jwt-decode";
 import { fetchAddById } from "../api";
+import { Carousel } from "react-bootstrap";
+import axios from "axios";
 
 export default function FullAdd() {
   const { id } = useParams();
@@ -34,20 +36,49 @@ export default function FullAdd() {
   }, [token]);
 
   console.log(add);
-
+  const handleDelete = async () => {
+    try {
+      const result = await axios.delete(
+        "http://localhost:3001/api/secured/delete/" + id,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   if (!add) {
     return <div>Loading...</div>;
   }
-
+  const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
   return (
     <main>
       <div className="ctn-full">
         <div className="ctn children">
-          <img
-            className="add_img"
-            src={process.env.PUBLIC_URL + "/empty.jpg"}
-            alt="Add"
-          />
+          {add.images && add.images.length !== 0 && (
+            <Carousel>
+              {add.images.map((imageObj, index) => (
+                <Carousel.Item key={index}>
+                  <img
+                    className="d-block w-100"
+                    src={base64ToUrl(imageObj.imageData)}
+                    alt={`Slide ${index}`}
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          )}
+          {add.images && add.images.length === 0 && (
+            <img
+              className="add_img"
+              src={process.env.PUBLIC_URL + "/empty.jpg"}
+              alt="Contact"
+            />
+          )}
           <h1>{add.title}</h1>
           <h2 className="price">{add.price}</h2>
           <h6>
@@ -89,7 +120,7 @@ export default function FullAdd() {
             </div>
             {email === add.email && (
               <div className="ctn-actions mb-4 mt-4">
-                <Link className="btn btn-danger btn-custom">
+                <Link to={"/edit/" + id} className="btn btn-danger btn-custom">
                   <img
                     src={process.env.PUBLIC_URL + "/edit-3-svgrepo-com.png"}
                     alt="Edit"
@@ -97,7 +128,10 @@ export default function FullAdd() {
                   />
                   Edit
                 </Link>
-                <button className="btn btn-danger btn-custom">
+                <button
+                  className="btn btn-danger btn-custom"
+                  onClick={() => handleDelete()}
+                >
                   <img
                     src={
                       process.env.PUBLIC_URL +

@@ -13,7 +13,7 @@ function AdvertisementList() {
     const fetchData = async () => {
       try {
         const response = await fetchAdvertisementsByCat(id);
-        if (!response == []) return navigate("/index"); // Assuming navigate is defined somewhere, like using React Router's useHistory hook
+        if (response.data.length === 0) return navigate("/index"); // Assuming navigate is defined somewhere, like using React Router's useHistory hook
         setAdvertisements(response.data);
       } catch (error) {
         console.error("Error fetching advertisements:", error);
@@ -30,7 +30,7 @@ function AdvertisementList() {
       {loading && <LoadingIcon />}
       <div className="ctn">
         {advertisements.map((advertisement) => (
-          <div key={advertisement.id}>
+          <div key={advertisement.id} className="card-ctn">
             <div className="card">
               {/* Check if there are images */}
               {advertisement.images.length > 0 ? (
