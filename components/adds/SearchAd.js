@@ -1,29 +1,27 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
+import { searchAdvertisements } from "../api";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(false);
   const { name } = useParams();
   useEffect(() => {
-    fetchAdvertisements();
-  }, [name]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await searchAdvertisements(name);
+        setAdvertisements(data);
+      } catch (error) {
+        // Handle error if needed
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchAdvertisements = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        "http://localhost:3001/api/v1/public/search/" + name
-      );
-      setAdvertisements(response.data);
-    } catch (error) {
-      console.error("Error fetching advertisements:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchData();
+  }, [name]);
 
   return (
     <>

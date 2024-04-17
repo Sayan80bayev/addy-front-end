@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
+import { fetchAdvertisements } from "../api";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchAdvertisements();
+    const fetchData = async () => {
+      try {
+        const data = await fetchAdvertisements();
+        setAdvertisements(data);
+      } catch (error) {
+        // Handle error if needed
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
-
-  const fetchAdvertisements = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        "http://localhost:3001/api/v1/public/getAdds"
-      );
-      setAdvertisements(response.data);
-    } catch (error) {
-      console.error("Error fetching advertisements:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       {loading && <LoadingIcon />}

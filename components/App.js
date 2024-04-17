@@ -8,6 +8,7 @@ import Home from "./Home";
 import FullAdd from "./adds/FullAdd";
 import SearchAd from "./adds/SearchAd";
 import NewAdvertisementForm from "./adds/NewAdvertisementForm";
+import EditAdvertisement from "./adds/EditAdvertisement";
 
 export default function App() {
   const routes = createBrowserRouter([
@@ -22,6 +23,10 @@ export default function App() {
     {
       path: "/newAdd",
       element: <NewAdvertisementForm />,
+    },
+    {
+      path: "/edit/:id",
+      element: <EditAdvertisement />,
     },
     {
       path: "/view/:id",

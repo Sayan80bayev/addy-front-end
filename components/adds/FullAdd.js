@@ -1,93 +1,134 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "../style/FullAdd.css";
 import Footer from "../Footer";
+import { jwtDecode } from "jwt-decode";
+import { fetchAddById } from "../api";
 
 export default function FullAdd() {
-  const { id } = useParams(); // Destructure id from the params object
-  const [add, setAdd] = useState(null); // Initialize state as null or the appropriate initial value
+  const { id } = useParams();
+  const [add, setAdd] = useState(null);
+  const [email, setEmail] = useState("");
+  const token = localStorage.getItem("authToken") ?? "";
 
   useEffect(() => {
-    const fetchAdd = async () => {
+    const fetchData = async () => {
       try {
-        const result = await axios.get(
-          "http://localhost:3001/api/v1/public/add/" + id
-        );
+        const result = await fetchAddById(id);
         setAdd(result.data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching add:", error);
       }
     };
 
-    fetchAdd();
-  }, [id]);
+    fetchData();
+  }, [id, token]);
+
+  useEffect(() => {
+    try {
+      const data = jwtDecode(token).sub ?? null;
+      setEmail(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [token]);
 
   console.log(add);
+
+  if (!add) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <main>
       <div className="ctn-full">
-        {add && (
-          <div className="ctn children">
+        <div className="ctn children">
+          <img
+            className="add_img"
+            src={process.env.PUBLIC_URL + "/empty.jpg"}
+            alt="Add"
+          />
+          <h1>{add.title}</h1>
+          <h2 className="price">{add.price}</h2>
+          <h6>
             <img
-              className="add_img"
-              src={process.env.PUBLIC_URL + "/empty.jpg"}
+              className="rec_icon"
+              src={process.env.PUBLIC_URL + "/description-svgrepo-com.png"}
+              alt="Add"
             />
-            <h1>{add.title}</h1>
-            <h2 className="price">{add.price}</h2>
-            <h6>
-              <img
-                className="rec_icon"
-                src={process.env.PUBLIC_URL + "/description-svgrepo-com.png"}
-                alt="Addy"
-              />
-              Description:
-            </h6>
-            <p>{add.description}</p>
-            <h6>
-              <img
-                className="rec_icon"
-                src={process.env.PUBLIC_URL + "/category-svgrepo-com.png"}
-                alt="Addy"
-              />
-              Categories:
-            </h6>
-            <p>{add.category.category_name}</p>
-          </div>
-        )}
+            Description:
+          </h6>
+          <p>{add.description}</p>
+          <h6>
+            <img
+              className="rec_icon"
+              src={process.env.PUBLIC_URL + "/category-svgrepo-com.png"}
+              alt="Add"
+            />
+            Categories:
+          </h6>
+          <p>{add.category && add.category.category_name}</p>{" "}
+        </div>
+
         <div className="ctn-additional">
           <div className="ctn-p-profile">
             <h5>
               <img
                 className="rec_icon"
                 src={process.env.PUBLIC_URL + "/author-sign-svgrepo-com.png"}
-                alt="Addy"
+                alt="Add"
               />
               Author:
             </h5>
             <div className="ctn-profile">
-              <h6>sayan123srev@gmail.com</h6>
-              <img src="https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" />
-            </div>
-            <br />
-            <button className="btn btn-danger btn-custom">
+              <h6>{add.email}</h6>
               <img
-                className="rec_icon"
-                src={
-                  process.env.PUBLIC_URL +
-                  "/call-dropped-rounded-svgrepo-com.png"
-                }
-                alt="Addy"
+                src="https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+                alt="Profile"
               />
-              Contact with author
-            </button>
-            <br />
+            </div>
+            {email === add.email && (
+              <div className="ctn-actions mb-4 mt-4">
+                <Link className="btn btn-danger btn-custom">
+                  <img
+                    src={process.env.PUBLIC_URL + "/edit-3-svgrepo-com.png"}
+                    alt="Edit"
+                    style={{ height: "20px" }}
+                  />
+                  Edit
+                </Link>
+                <button className="btn btn-danger btn-custom">
+                  <img
+                    src={
+                      process.env.PUBLIC_URL +
+                      "/delete-clipboard-svgrepo-com.png"
+                    }
+                    alt="Delete"
+                    style={{ height: "20px" }}
+                  />
+                  Delete
+                </button>
+              </div>
+            )}
+            {email !== add.email && (
+              <button className="mt-4 mb-4 btn btn-danger btn-custom">
+                <img
+                  className="rec_icon"
+                  src={
+                    process.env.PUBLIC_URL +
+                    "/call-dropped-rounded-svgrepo-com.png"
+                  }
+                  alt="Contact"
+                />
+                Contact with author
+              </button>
+            )}
           </div>
           <h4>
             <img
               className="rec_icon"
               src={process.env.PUBLIC_URL + "/bulb-on-svgrepo-com.png"}
-              alt="Addy"
+              alt="Recommendation"
             />
             More like this:{" "}
           </h4>
@@ -95,36 +136,7 @@ export default function FullAdd() {
             <img
               className="rec_img"
               src="https://mexicana.cultura.gob.mx/work/models/repositorio/img/empty.jpg"
-            />
-            <ul>
-              <br />
-              <li>
-                <p>sayan</p>
-              </li>
-              <li>
-                <p>5000</p>
-              </li>
-            </ul>
-          </div>
-          <div className="ctn-recomendations">
-            <img
-              className="rec_img"
-              src="https://mexicana.cultura.gob.mx/work/models/repositorio/img/empty.jpg"
-            />
-            <ul>
-              <br />
-              <li>
-                <p>sayan</p>
-              </li>
-              <li>
-                <p>5000</p>
-              </li>
-            </ul>
-          </div>
-          <div className="ctn-recomendations">
-            <img
-              className="rec_img"
-              src="https://mexicana.cultura.gob.mx/work/models/repositorio/img/empty.jpg"
+              alt="Recommendation"
             />
             <ul>
               <br />
@@ -141,7 +153,7 @@ export default function FullAdd() {
             <img
               className="rec_icon"
               src={process.env.PUBLIC_URL + "/arrow-down-svgrepo-com (1).png "}
-              alt="Addy"
+              alt="See more"
             />
             See more like this
           </button>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../style/AddForms.css";
 import Footer from "../Footer";
-import { fetchCategories } from "../api";
+import { fetchAddById, fetchCategories } from "../api";
 
-function NewAdvertisementForm() {
+function EditAdvertisement() {
   const [categories, setCategories] = useState([]);
+  const { id } = useParams();
   const [images, setImages] = useState([]);
   const token = localStorage.getItem("authToken");
   const [formData, setFormData] = useState({
@@ -50,26 +51,28 @@ function NewAdvertisementForm() {
 
     const formDataToSend = new FormData();
 
-    const json = JSON.stringify({
+    // Convert advertisement data to JSON string and append it as a Blob
+    const advertisementData = {
       title: formData.title,
       description: formData.description,
       price: formData.price,
       category: {
         category_id: formData.category_id,
       },
-    });
-    const blob = new Blob([json], {
+    };
+    const advertisementBlob = new Blob([JSON.stringify(advertisementData)], {
       type: "application/json",
     });
-    formDataToSend.append("advertisement", blob);
+    formDataToSend.append("advertisement", advertisementBlob);
     formDataToSend.append("files", new Blob([]));
     for (const image of images) {
       formDataToSend.append("files", image);
     }
+    console.log(formDataToSend.get("files"));
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/secured/create",
+      const response = await axios.put(
+        `http://localhost:3001/api/secured/edit/${id}`,
         formDataToSend,
         {
           headers: {
@@ -88,6 +91,22 @@ function NewAdvertisementForm() {
     const fetchData = async () => {
       try {
         const data = await fetchCategories();
+        const adResponse = await fetchAddById(id);
+        const formDataFromObject = {
+          title: adResponse.data.title || "",
+          description: adResponse.data.description || "",
+          price: adResponse.data.price.toString() || "",
+          category_id: adResponse.data.category.category_id.toString() || "",
+        };
+        const decodedImages = adResponse.data.images.map((imageData) => {
+          const img = new Image();
+          img.src = "data:image/jpeg;base64," + imageData.imageData;
+          return img;
+        });
+
+        // Update the state variable with the decoded images
+        setImages(decodedImages);
+        setFormData(formDataFromObject);
         setCategories(data);
       } catch (error) {
         // Handle error if needed
@@ -189,7 +208,7 @@ function NewAdvertisementForm() {
                   <div key={index} className="img-ctn">
                     <img
                       className="img"
-                      src={URL.createObjectURL(image)}
+                      src={image.src ?? URL.createObjectURL(image)} // Changed from URL.createObjectURL(image) to image.src
                       alt={`Image ${index + 1}`}
                     />
                     <button
@@ -215,4 +234,4 @@ function NewAdvertisementForm() {
   );
 }
 
-export default NewAdvertisementForm;
+export default EditAdvertisement;

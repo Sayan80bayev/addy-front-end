@@ -54,3 +54,15 @@ main{
 ul{
     list-style-type: none;
 }
+.ctn-actions{
+    display: flex;
+    justify-content: space-between;
+}
+.ctn-actions .btn{ 
+    justify-content: center;
+    display: flex;
+    width: 45%;
+}
+.btn img{
+    margin: auto 0 auto 0;
+}
