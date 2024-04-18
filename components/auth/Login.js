@@ -5,15 +5,9 @@ import "../style/App.css";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  let message = "";
-  try {
-    const result = location.state.message;
-    message = result;
-  } catch (error) {}
-
+  const [message, setMessage] = useState(location.state);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,10 +23,16 @@ export default function Login() {
         console.log(localStorage.getItem("authToken"));
         return navigate("/index");
       } else {
-        setError("Authentication failed");
+        setMessage({
+          status: "error",
+          message: "Wrong credentials",
+        });
       }
     } catch (error) {
-      setError("Authentication failed");
+      setMessage({
+        status: "error",
+        message: "Authentication failed",
+      });
     }
   };
 
@@ -74,9 +74,10 @@ export default function Login() {
           <div className="signup-link">
             Not a member? <Link to="/registration">Signup now</Link>
           </div>
-          <p className="alert alert-danger">{message ?? null}</p>
           <br />
-          {error && <p className="alert alert-danger">{error}</p>}
+          {message?.status && (
+            <p className="alert alert-danger">{message.message}</p>
+          )}
         </form>
       </div>
     </>

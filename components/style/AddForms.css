@@ -35,10 +35,12 @@ input[type = "file"]{
     border: none;
 }
 .img-ctn{
+    height: 140px;
     display: flex;
     width: max-content;
 }
 .selected-images .img{
+    margin: auto;
     height: 100px;
     width: 100px;
     object-fit: cover;

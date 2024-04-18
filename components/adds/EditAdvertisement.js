@@ -17,6 +17,7 @@ function EditAdvertisement() {
     category_id: "",
   });
   const navigate = useNavigate();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -87,8 +88,17 @@ function EditAdvertisement() {
         }
       );
       console.log("Advertisement saved successfully:", response.data);
+      navigate("/index", {
+        state: {
+          status: "success",
+          message: "Advertisement saved successfully",
+        },
+      });
     } catch (error) {
       console.error("Failed to save advertisement:", error);
+      navigate("/index", {
+        state: { status: "error", message: "Failed to save advertisement" },
+      });
     }
   };
 
@@ -142,7 +152,7 @@ function EditAdvertisement() {
   return (
     <main>
       <div className="mb-5">
-        <h2>Add New Advertisement</h2>
+        <h2>Edit Advertisement</h2>
         <br />
         <br />
         <form onSubmit={handleSubmit}>
@@ -234,7 +244,9 @@ function EditAdvertisement() {
                     >
                       <img
                         className="delete_icon"
-                        src={imageIconPath}
+                        src={
+                          process.env.PUBLIC_URL + "/plus-svgrepo-com (1).png"
+                        }
                         alt="Addy"
                       />
                     </button>

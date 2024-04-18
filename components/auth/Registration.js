@@ -15,10 +15,13 @@ export default function Registration() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/registration",
+        "http://localhost:3001/api/v1/auth/register",
         user
       );
-      setMessage({ status: response.status, message: response.data });
+      setMessage({
+        status: "success",
+        message: "Registrated successfully!",
+      });
     } catch (error) {
       setMessage({
         status: "error",
@@ -74,6 +77,12 @@ export default function Registration() {
           Already registered? <Link to="/login">Log in now</Link>
         </div>
         <br />
+        {message?.status == "error" && (
+          <p className="alert alert-danger">{message.message}</p>
+        )}
+        {message?.status == "success" && (
+          <p className="alert alert-info">{message.message}</p>
+        )}
       </form>
     </div>
   );

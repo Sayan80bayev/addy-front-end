@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "../style/FullAdd.css";
 import Footer from "../Footer";
 import { jwtDecode } from "jwt-decode";
@@ -12,6 +12,7 @@ export default function FullAdd() {
   const [add, setAdd] = useState(null);
   const [email, setEmail] = useState("");
   const token = localStorage.getItem("authToken") ?? "";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,9 +47,13 @@ export default function FullAdd() {
           },
         }
       );
-      return result;
+      return navigate("/index", {
+        state: { status: "success", message: "Successfully deleted" },
+      });
     } catch (error) {
-      console.log(error);
+      return navigate("/index", {
+        state: { status: "error", message: "Couldn't deleted" },
+      });
     }
   };
   if (!add) {
