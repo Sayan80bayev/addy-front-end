@@ -7,7 +7,8 @@ import ByCategory from "./adds/ByCategory";
 import Home from "./Home";
 import FullAdd from "./adds/FullAdd";
 import SearchAd from "./adds/SearchAd";
-import NewAdvertisementForm from "./adds/NewAdvertisementForm";
+import SimilarAdds from "./adds/SimilarAdds";
+import AdvertisementForm from "./adds/AdvertisementForm";
 import EditAdvertisement from "./adds/EditAdvertisement";
 import Template from "./Template";
 import CategoryControll from "./admin/CategoryControll";
@@ -28,7 +29,7 @@ export default function App() {
       children: [
         {
           path: "/newAdd",
-          element: <NewAdvertisementForm />,
+          element: <AdvertisementForm isEditing={false} />,
         },
         {
           path: "/catControll",
@@ -36,7 +37,7 @@ export default function App() {
         },
         {
           path: "/edit/:id",
-          element: <EditAdvertisement />,
+          element: <AdvertisementForm isEditing={true} />,
         },
         {
           path: "/view/:id",
@@ -59,8 +60,8 @@ export default function App() {
               element: <SearchAd />,
             },
             {
-              path: "/index/cat/:id",
-              element: <ByCategory />,
+              path: "/index/similars/:id/:cat_id/:price",
+              element: <SimilarAdds />,
             },
           ],
         },

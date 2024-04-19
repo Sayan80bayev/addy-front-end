@@ -25,6 +25,9 @@ function CategoryBar() {
         display: "flex",
       }}
     >
+      <div className="category" style={{ flex: "1", textAlign: "center" }}>
+        <Link to="/index">All</Link>
+      </div>
       {categories.map((category, index) => (
         <div
           key={index}

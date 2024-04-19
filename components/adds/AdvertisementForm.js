@@ -3,13 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../style/AddForms.css";
 import Footer from "../Footer";
-import { fetchAddById, fetchCategories } from "../api";
+import { fetchCategories, fetchAddById } from "../api";
+import { jwtDecode } from "jwt-decode";
 
-function EditAdvertisement() {
+function AdvertisementForm({ isEditing }) {
   const [categories, setCategories] = useState([]);
-  const { id } = useParams();
   const [images, setImages] = useState([]);
+  const { id } = useParams();
   const token = localStorage.getItem("authToken");
+  const [email, setEmail] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -17,6 +19,47 @@ function EditAdvertisement() {
     category_id: "",
   });
   const navigate = useNavigate();
+
+  const fetchData = async () => {
+    try {
+      const data = await fetchCategories();
+      setCategories(data);
+      if (isEditing) {
+        const adResponse = await fetchAddById(id);
+        const formDataFromObject = {
+          title: adResponse.data.title || "",
+          description: adResponse.data.description || "",
+          price: adResponse.data.price.toString() || "",
+          category_id: adResponse.data.category.category_id.toString() || "",
+        };
+        setFormData(formDataFromObject);
+        const decodedFiles = adResponse.data.images.map((imageData) => {
+          // Assuming imageData.imageData is base64 encoded image data
+          const byteCharacters = atob(imageData.imageData);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+
+          // Set the type of the file to 'image/png' or your appropriate image type
+          const file = new File([byteArray], imageData.fileName, {
+            type: "image/png", // or set it to the appropriate image type based on your data
+          });
+
+          return file;
+        });
+        setImages(decodedFiles);
+        setEmail(adResponse.data.email);
+      }
+    } catch (error) {
+      // Handle error if needed
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -77,17 +120,31 @@ function EditAdvertisement() {
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:3001/api/secured/edit/${id}`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Advertise  ment saved successfully:", response.data);
+      let response;
+      if (isEditing) {
+        response = await axios.put(
+          `http://localhost:3001/api/secured/edit/${id}`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        response = await axios.post(
+          "http://localhost:3001/api/secured/create",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+      console.log("Advertisement saved successfully:", response.data);
       navigate("/index", {
         state: {
           status: "success",
@@ -102,57 +159,24 @@ function EditAdvertisement() {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchCategories();
-        const adResponse = await fetchAddById(id);
-        const formDataFromObject = {
-          title: adResponse.data.title || "",
-          description: adResponse.data.description || "",
-          price: adResponse.data.price.toString() || "",
-          category_id: adResponse.data.category.category_id.toString() || "",
-        };
-        const decodedFiles = adResponse.data.images.map((imageData) => {
-          // Assuming imageData.imageData is base64 encoded image data
-          const byteCharacters = atob(imageData.imageData);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-
-          // Set the type of the file to 'image/png' or your appropriate image type
-          const file = new File([byteArray], imageData.fileName, {
-            type: "image/png", // or set it to the appropriate image type based on your data
-          });
-
-          return file;
-        });
-
-        // Update the state variable with the decoded files
-        setImages(decodedFiles);
-
-        setFormData(formDataFromObject);
-        setCategories(data);
-      } catch (error) {
-        // Handle error if needed
-      }
-    };
-
-    fetchData();
-  }, []);
-  console.log(images);
   const imageIconPath = process.env.PUBLIC_URL + "/plus-svgrepo-com.png";
   if (!localStorage.getItem("authToken")) {
     return navigate("/login", {
-      state: { status: "success", message: "First you need to login!" },
+      state: { status: "error", message: "First you need to login!" },
+    });
+  } else if (
+    isEditing &&
+    email &&
+    email != jwtDecode(localStorage.getItem("authToken")).sub
+  ) {
+    return navigate("/index", {
+      state: { status: "error", message: "No access!" },
     });
   }
   return (
     <main>
       <div className="mb-5">
-        <h2>Edit Advertisement</h2>
+        <h2>{isEditing ? "Edit" : "Add New"} Advertisement</h2>
         <br />
         <br />
         <form onSubmit={handleSubmit}>
@@ -264,4 +288,4 @@ function EditAdvertisement() {
   );
 }
 
-export default EditAdvertisement;
+export default AdvertisementForm;

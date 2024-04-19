@@ -13,6 +13,32 @@ export default function Registration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user.email || !user.username || !user.password) {
+      setMessage({
+        status: "error",
+        message: "Please fill out all fields.",
+      });
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      setMessage({
+        status: "error",
+        message: "Please enter a valid email address.",
+      });
+      return;
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!passwordRegex.test(user.password)) {
+      setMessage({
+        status: "error",
+        message:
+          "Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, and one digit.",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/auth/register",
@@ -20,7 +46,7 @@ export default function Registration() {
       );
       setMessage({
         status: "success",
-        message: "Registrated successfully!",
+        message: "Registered successfully!",
       });
     } catch (error) {
       setMessage({
@@ -38,30 +64,15 @@ export default function Registration() {
 
       <form onSubmit={handleSubmit}>
         <div className="field">
-          <input
-            type="text"
-            required
-            name="email"
-            onChange={handleInputChange}
-          />
+          <input type="text" name="email" onChange={handleInputChange} />
           <label>Email Address</label>
         </div>
         <div className="field">
-          <input
-            type="text"
-            required
-            name="username"
-            onChange={handleInputChange}
-          />
+          <input type="text" name="username" onChange={handleInputChange} />
           <label>Name</label>
         </div>
         <div className="field">
-          <input
-            type="password"
-            required
-            name="password"
-            onChange={handleInputChange}
-          />
+          <input type="password" name="password" onChange={handleInputChange} />
           <label>Password</label>
         </div>
         <div className="content">
@@ -77,10 +88,10 @@ export default function Registration() {
           Already registered? <Link to="/login">Log in now</Link>
         </div>
         <br />
-        {message?.status == "error" && (
+        {message?.status === "error" && (
           <p className="alert alert-danger">{message.message}</p>
         )}
-        {message?.status == "success" && (
+        {message?.status === "success" && (
           <p className="alert alert-info">{message.message}</p>
         )}
       </form>

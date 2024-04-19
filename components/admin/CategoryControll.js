@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { fetchCategories } from "../api";
 import Footer from "../Footer";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+
 const CategoryControll = () => {
   const token = localStorage.getItem("authToken");
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState("");
   const [categories, setCategories] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,6 +57,13 @@ const CategoryControll = () => {
       console.log(error);
     }
   };
+  if (!token || jwtDecode(token).authorities != "ADMIN")
+    return navigate("/index", {
+      state: {
+        status: "error",
+        message: "No access!",
+      },
+    });
   return (
     <>
       <main style={{ minHeight: "800px" }}>

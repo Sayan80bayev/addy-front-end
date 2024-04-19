@@ -75,9 +75,9 @@ export default function FullAdd() {
     }
   };
   if (!add) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
-  console.log(add);
+
   const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
   return (
     <main>
@@ -248,7 +248,10 @@ export default function FullAdd() {
               ))}
               <br />
               {similars.length > 3 && (
-                <button className="btn btn-danger btn-custom">
+                <Link
+                  to={`/index/similars/${add.id}/${add.category.category_id}/${add.price}`}
+                  className="btn btn-danger btn-custom"
+                >
                   <img
                     className="rec_icon"
                     src={
@@ -258,7 +261,7 @@ export default function FullAdd() {
                     alt="See more"
                   />
                   See more like this
-                </button>
+                </Link>
               )}
             </>
           )}
