@@ -231,10 +231,17 @@ export default function FullAdd() {
                   <ul>
                     <br />
                     <li>
-                      <p>{ad.title}</p>
+                      <Link
+                        to={"/view/" + ad.id}
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {ad.title}
+                      </Link>
                     </li>
                     <li>
-                      <p>{ad.price}</p>
+                      <p className="price" style={{ fontWeight: "bold" }}>
+                        {ad.price}
+                      </p>
                     </li>
                   </ul>
                 </div>
