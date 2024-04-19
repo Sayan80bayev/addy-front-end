@@ -10,6 +10,7 @@ import SearchAd from "./adds/SearchAd";
 import NewAdvertisementForm from "./adds/NewAdvertisementForm";
 import EditAdvertisement from "./adds/EditAdvertisement";
 import Template from "./Template";
+import CategoryControll from "./admin/CategoryControll";
 
 export default function App() {
   const routes = createBrowserRouter([
@@ -28,6 +29,10 @@ export default function App() {
         {
           path: "/newAdd",
           element: <NewAdvertisementForm />,
+        },
+        {
+          path: "/catControll",
+          element: <CategoryControll />,
         },
         {
           path: "/edit/:id",

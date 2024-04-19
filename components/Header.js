@@ -1,18 +1,22 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
-  const [token, setToken] = useState("");
-  console.log(token);
+  const [authorities, setAuthorities] = useState(null);
 
   useEffect(() => {
-    setToken(localStorage.getItem("authToken"));
-  }, [localStorage.getItem("authToken")]);
+    const storedToken = localStorage.getItem("authToken");
+    if (storedToken) {
+      const decodedToken = jwtDecode(storedToken);
+      setAuthorities(decodedToken.authorities);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setToken(null);
+    setAuthorities(null);
   };
+
   return (
     <header>
       <nav>
@@ -21,10 +25,15 @@ const Header = () => {
           <a href="/">My Website</a>
           <a href="/index">Home</a>
           <a href="/newAdd">New add</a>
-          {token && (
+          {authorities ? (
             <button className="btn-no-style" onClick={handleLogout}>
               <a href="/login">Logout</a>
             </button>
+          ) : (
+            <a href="/login">Login</a>
+          )}
+          {authorities === "ADMIN" && (
+            <a href="/catControll">Controll categories</a>
           )}
         </div>
       </nav>

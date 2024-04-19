@@ -62,7 +62,6 @@ function NewAdvertisementForm() {
       type: "application/json",
     });
     formDataToSend.append("advertisement", blob);
-    formDataToSend.append("files", new Blob([]));
     for (const image of images) {
       formDataToSend.append("files", image);
     }
@@ -79,8 +78,17 @@ function NewAdvertisementForm() {
         }
       );
       console.log("Advertisement saved successfully:", response.data);
+      navigate("/index", {
+        state: {
+          status: "success",
+          message: "Advertisement saved successfully",
+        },
+      });
     } catch (error) {
       console.error("Failed to save advertisement:", error);
+      navigate("/index", {
+        state: { status: "error", message: "Failed to save advertisement" },
+      });
     }
   };
 
@@ -192,16 +200,18 @@ function NewAdvertisementForm() {
                       src={URL.createObjectURL(image)}
                       alt={`Image ${index + 1}`}
                     />
-                    <button
-                      className="delete_button"
+                    <div
+                      className="delete_overlay"
                       onClick={() => handleImageDelete(image)}
                     >
                       <img
                         className="delete_icon"
-                        src={imageIconPath}
-                        alt="Addy"
+                        src={
+                          process.env.PUBLIC_URL + "/plus-svgrepo-com (1).png"
+                        }
+                        alt="Delete"
                       />
-                    </button>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -29,6 +29,7 @@ body {
   margin-bottom: 20px;
 }
 .category{
+  height: max-content;
   padding: 10px;
   background-color: #333333;
   border-radius: 20px;
@@ -126,7 +127,7 @@ select option {
   color: aliceblue;
 }
 .card{
-  height: 300px;
+  height: 320px;
   min-height: 150px;
   border: #FF0084 solid 2px;
   border-radius: 20px;
@@ -147,7 +148,7 @@ select option {
   text-overflow: ellipsis;
 }
 .card-info{
-  height: 100px;
+  height: 130px;
   padding: 20px;
 }
 .card-info p, .card-info h5{
@@ -242,4 +243,7 @@ a{
   background-color: transparent;
   color: white;
   border: none;
+}
+.views img{
+  height: 20px;
 }

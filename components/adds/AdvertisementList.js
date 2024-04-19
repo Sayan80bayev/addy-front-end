@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { fetchAdvertisements } from "../api";
+import { simplifyTimestamp } from "../api";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -49,10 +50,17 @@ function AdvertisementList() {
                 <p className="price">
                   <b>{advertisement.price}</b>
                 </p>
-                <p>
-                  <small>{advertisement.date}</small>
-                </p>
                 <p>{advertisement.category.category_name}</p>
+                <p style={{ display: "flex", justifyContent: "space-between" }}>
+                  <small>{simplifyTimestamp(advertisement.date)}</small>
+                  <div className="views">
+                    <img
+                      className="rec_icon "
+                      src={process.env.PUBLIC_URL + "/view-eye-svgrepo-com.png"}
+                    />
+                    <h6 style={{ display: "block" }}>{advertisement.views}</h6>
+                  </div>
+                </p>
               </div>
             </div>
           </div>

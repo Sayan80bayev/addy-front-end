@@ -2,15 +2,18 @@ main{
     padding: 50px;
 }
 .add_img{
-    width: 700px;
+    width: 100%;
+    object-fit: cover;
+    height: 500px;
 }
 .ctn-full{
     display: flex;
     justify-content: space-between;
 }
 .children{
+    width: 70%;
+    display: flex;
     flex-direction: column;
-    width: max-content;
 }
 .ctn-additional{
     width: 25%;
@@ -32,6 +35,7 @@ main{
     border-radius: 50%;
 }
 .ctn-recomendations{
+    max-height: 140px;
     margin-top: 10px;
     border: #FF0084 solid 2px;
     border-radius: 10px;
@@ -40,6 +44,8 @@ main{
     flex-direction: row;
 }
 .rec_img{
+    width: 45%;
+    object-fit: cover;
     max-width: 150px;
 }
 .rec_icon{
@@ -65,4 +71,11 @@ ul{
 }
 .btn img{
     margin: auto 0 auto 0;
+}
+.views{
+    display: flex;
+    align-items: center;
+}
+.views h6{
+    margin: 0;
 }

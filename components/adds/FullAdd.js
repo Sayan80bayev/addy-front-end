@@ -5,11 +5,13 @@ import Footer from "../Footer";
 import { jwtDecode } from "jwt-decode";
 import { fetchAddById } from "../api";
 import { Carousel } from "react-bootstrap";
+import { findSimilars } from "../api";
 import axios from "axios";
 
 export default function FullAdd() {
   const { id } = useParams();
   const [add, setAdd] = useState(null);
+  const [similars, setSimilars] = useState(null);
   const [email, setEmail] = useState("");
   const token = localStorage.getItem("authToken") ?? "";
   const navigate = useNavigate();
@@ -35,8 +37,24 @@ export default function FullAdd() {
       console.log(error);
     }
   }, [token]);
-
-  console.log(add);
+  useEffect(() => {
+    const findSimilarsAds = async () => {
+      try {
+        // Ensure 'add' is not null and has a valid category
+        if (add.id && add.category && add.category.category_id && add.price) {
+          const data = await findSimilars(
+            add.category.category_id,
+            add.price,
+            add.id
+          );
+          setSimilars(data);
+        }
+      } catch (error) {
+        console.error("Error fetching similar ads:", error);
+      }
+    };
+    findSimilarsAds();
+  }, [add]);
   const handleDelete = async () => {
     try {
       const result = await axios.delete(
@@ -59,12 +77,13 @@ export default function FullAdd() {
   if (!add) {
     return <div>Loading...</div>;
   }
+  console.log(add);
   const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
   return (
     <main>
       <div className="ctn-full">
         <div className="ctn children">
-          {add.images && add.images.length !== 0 && (
+          {add.images && add.images.length > 1 && (
             <Carousel>
               {add.images.map((imageObj, index) => (
                 <Carousel.Item key={index}>
@@ -77,6 +96,13 @@ export default function FullAdd() {
               ))}
             </Carousel>
           )}
+          {add.images && add.images.length == 1 && (
+            <img
+              className="add_img"
+              src={base64ToUrl(add.images[0].imageData)}
+              alt="Contact"
+            />
+          )}
           {add.images && add.images.length === 0 && (
             <img
               className="add_img"
@@ -84,7 +110,15 @@ export default function FullAdd() {
               alt="Contact"
             />
           )}
-          <h1>{add.title}</h1>
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {add.title}{" "}
+          </h1>
           <h2 className="price">{add.price}</h2>
           <h6>
             <img
@@ -104,8 +138,14 @@ export default function FullAdd() {
             Categories:
           </h6>
           <p>{add.category && add.category.category_name}</p>{" "}
+          <div className="views">
+            <img
+              className="rec_icon "
+              src={process.env.PUBLIC_URL + "/view-eye-svgrepo-com.png"}
+            />
+            <h6 style={{ display: "block" }}>{add.views}</h6>
+          </div>
         </div>
-
         <div className="ctn-additional">
           <div className="ctn-p-profile">
             <h5>
@@ -163,39 +203,58 @@ export default function FullAdd() {
               </button>
             )}
           </div>
-          <h4>
-            <img
-              className="rec_icon"
-              src={process.env.PUBLIC_URL + "/bulb-on-svgrepo-com.png"}
-              alt="Recommendation"
-            />
-            More like this:{" "}
-          </h4>
-          <div className="ctn-recomendations">
-            <img
-              className="rec_img"
-              src="https://mexicana.cultura.gob.mx/work/models/repositorio/img/empty.jpg"
-              alt="Recommendation"
-            />
-            <ul>
+          {similars != null && similars.length > 0 && (
+            <>
+              <h4>
+                <img
+                  className="rec_icon"
+                  src={process.env.PUBLIC_URL + "/bulb-on-svgrepo-com.png"}
+                  alt="Recommendation"
+                />
+                More like this:{" "}
+              </h4>
+              {similars.slice(0, 3).map((ad, i) => (
+                <div className="ctn-recomendations" key={i}>
+                  {ad.images.length > 0 ? (
+                    <img
+                      className="rec_img"
+                      src={`data:image/jpeg;base64,${ad.images[0].imageData}`}
+                      alt={`First Image`}
+                    />
+                  ) : (
+                    <img
+                      className="rec_img"
+                      src={process.env.PUBLIC_URL + "/empty.jpg"}
+                      alt={ad.title}
+                    />
+                  )}
+                  <ul>
+                    <br />
+                    <li>
+                      <p>{ad.title}</p>
+                    </li>
+                    <li>
+                      <p>{ad.price}</p>
+                    </li>
+                  </ul>
+                </div>
+              ))}
               <br />
-              <li>
-                <p>sayan</p>
-              </li>
-              <li>
-                <p>5000</p>
-              </li>
-            </ul>
-          </div>
-          <br />
-          <button className="btn btn-danger btn-custom">
-            <img
-              className="rec_icon"
-              src={process.env.PUBLIC_URL + "/arrow-down-svgrepo-com (1).png "}
-              alt="See more"
-            />
-            See more like this
-          </button>
+              {similars.length > 3 && (
+                <button className="btn btn-danger btn-custom">
+                  <img
+                    className="rec_icon"
+                    src={
+                      process.env.PUBLIC_URL +
+                      "/arrow-down-svgrepo-com (1).png "
+                    }
+                    alt="See more"
+                  />
+                  See more like this
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
       <Footer />

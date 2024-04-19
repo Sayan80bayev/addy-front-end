@@ -54,3 +54,24 @@ export const fetchCategories = async () => {
     throw error; // Re-throw the error to handle it in the component if needed
   }
 };
+export const findSimilars = async (cat_id, price, id) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3001/api/v1/public/getSimilars?cat=${cat_id}&price=${price}&id=${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export function simplifyTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  const simplifiedDate = `${date.getFullYear()}.${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}.${date.getDate().toString().padStart(2, "0")}`;
+  const simplifiedTime = `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+  return `${simplifiedDate} ${simplifiedTime}`;
+}

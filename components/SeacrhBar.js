@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 const SearchBar = () => {
   const [search, setSearch] = useState("");
 
-  // Function to handle input change
   const handleInputChange = (event) => {
     setSearch(event.target.value);
   };
@@ -18,7 +17,7 @@ const SearchBar = () => {
         aria-label="Search"
         aria-describedby="basic-addon2"
         value={search}
-        onChange={handleInputChange} // Call handleInputChange on change
+        onChange={handleInputChange}
       />
       <Link
         to={"/index/search/" + search}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import SearchBar from "./SeacrhBar";
@@ -9,6 +9,7 @@ import { useState } from "react";
 export default function Home() {
   const location = useLocation();
   const [message, setMessage] = useState(location.state);
+
   return (
     <>
       <h1 className="name_of_comp">

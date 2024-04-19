@@ -87,7 +87,7 @@ function EditAdvertisement() {
           },
         }
       );
-      console.log("Advertisement saved successfully:", response.data);
+      console.log("Advertise  ment saved successfully:", response.data);
       navigate("/index", {
         state: {
           status: "success",
@@ -232,24 +232,25 @@ function EditAdvertisement() {
               </label>
               <div className="selected-images">
                 {images.map((image, index) => (
-                  <div key={index} className="img-ctn">
+                  <div
+                    key={index}
+                    className="img-ctn"
+                    onClick={() => handleImageDelete(image)}
+                  >
                     <img
                       className="img"
-                      src={image.src ?? URL.createObjectURL(image)} // Changed from URL.createObjectURL(image) to image.src
+                      src={image.src ?? URL.createObjectURL(image)}
                       alt={`Image ${index + 1}`}
                     />
-                    <button
-                      className="delete_button"
-                      onClick={() => handleImageDelete(image)}
-                    >
+                    <div className="delete_overlay">
                       <img
                         className="delete_icon"
                         src={
                           process.env.PUBLIC_URL + "/plus-svgrepo-com (1).png"
                         }
-                        alt="Addy"
+                        alt="Delete"
                       />
-                    </button>
+                    </div>
                   </div>
                 ))}
               </div>
