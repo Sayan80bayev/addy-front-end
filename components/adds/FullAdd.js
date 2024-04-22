@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { fetchAddById } from "../api";
 import { Carousel } from "react-bootstrap";
 import { findSimilars } from "../api";
+import { simplifyTimestamp } from "./service";
 import axios from "axios";
 
 export default function FullAdd() {
@@ -242,6 +243,16 @@ export default function FullAdd() {
                       <p className="price" style={{ fontWeight: "bold" }}>
                         {ad.price}
                       </p>
+                    </li>
+                    <li>
+                      <p
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <small>{simplifyTimestamp(ad.date)}</small>
+                      </p>{" "}
                     </li>
                   </ul>
                 </div>

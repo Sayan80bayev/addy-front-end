@@ -9,7 +9,6 @@ import FullAdd from "./adds/FullAdd";
 import SearchAd from "./adds/SearchAd";
 import SimilarAdds from "./adds/SimilarAdds";
 import AdvertisementForm from "./adds/AdvertisementForm";
-import EditAdvertisement from "./adds/EditAdvertisement";
 import Template from "./Template";
 import CategoryControll from "./admin/CategoryControll";
 

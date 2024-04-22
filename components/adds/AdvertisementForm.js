@@ -12,6 +12,7 @@ function AdvertisementForm({ isEditing }) {
   const { id } = useParams();
   const token = localStorage.getItem("authToken");
   const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -53,7 +54,7 @@ function AdvertisementForm({ isEditing }) {
         setEmail(adResponse.data.email);
       }
     } catch (error) {
-      // Handle error if needed
+      console.log(error);
     }
   };
 
@@ -99,7 +100,13 @@ function AdvertisementForm({ isEditing }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const requiredFields = ["title", "description", "price", "category_id"];
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
 
+    if (emptyFields.length > 0) {
+      setErrorMessage(`Please fill out all required fields`);
+      return;
+    }
     const formDataToSend = new FormData();
 
     // Convert advertisement data to JSON string and append it as a Blob
@@ -153,9 +160,7 @@ function AdvertisementForm({ isEditing }) {
       });
     } catch (error) {
       console.error("Failed to save advertisement:", error);
-      navigate("/index", {
-        state: { status: "error", message: "Failed to save advertisement" },
-      });
+      setErrorMessage("Failed to save advertisement");
     }
   };
 
@@ -175,113 +180,127 @@ function AdvertisementForm({ isEditing }) {
   }
   return (
     <main>
-      <div className="mb-5">
-        <h2>{isEditing ? "Edit" : "Add New"} Advertisement</h2>
-        <br />
-        <br />
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <h4>
-              <label htmlFor="title">Title:</label>
-            </h4>
-            <input
-              className="form-input"
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <h4>
-              <label htmlFor="description">Description:</label>
-            </h4>
-            <textarea
-              className="form-input"
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <h4>
-              <label htmlFor="price">Price:</label>
-            </h4>
-            <input
-              type="number"
-              className="form-input"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-3">
-            <h4>
-              <label htmlFor="category">Category:</label>
-            </h4>
-            <select
-              name="category_id" // Changed from "category" to "category_id"
-              className="form-select"
-              value={formData.category_id}
-              onChange={handleChange} // Changed from handleChange to handleCategoryChange
-            >
-              <option value="">Select Category</option> // Added value attribute
-              {categories.map((category) => (
-                <option key={category.category_id} value={category.category_id}>
-                  {category.category_name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-3">
-            <h4>
-              <label htmlFor="image">Image:</label>
-            </h4>
-            <div className="image-selector">
+      {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
+      <div className="mb-5" style={{ display: "flex" }}>
+        <div style={{ width: "60%" }}>
+          <h2>{isEditing ? "Edit" : "Add New"} Advertisement</h2>
+          <br />
+          <br />
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <h6>
+                <label htmlFor="title">Title*</label>
+              </h6>
               <input
-                type="file"
-                id="image-upload"
-                accept="image/*"
-                multiple
-                onChange={handleImageChange}
-                hidden
+                className="form-input"
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
+                placeholder="Toyota Camry 50"
+                onChange={handleChange}
               />
-              <label htmlFor="image-upload">
-                <i className="fas fa-plus"></i>
-                <img className="rec_icon" src={imageIconPath} alt="Addy" />
-              </label>
-              <div className="selected-images">
-                {images.map((image, index) => (
-                  <div
-                    key={index}
-                    className="img-ctn"
-                    onClick={() => handleImageDelete(image)}
+            </div>
+            <div className="mb-3">
+              <h6>
+                <label htmlFor="description">Description*</label>
+              </h6>
+              <textarea
+                className="form-input"
+                id="description"
+                name="description"
+                value={formData.description}
+                placeholder="Think about description"
+                onChange={handleChange}
+                style={{
+                  whiteSpace: "pre-wrap",
+                  overflow: "hidden",
+                  wordWrap: "break-word",
+                  resize: "none",
+                  height: "200px",
+                }}
+              />
+            </div>
+            <div className="mb-3">
+              <h6>
+                <label htmlFor="price">Price*</label>
+              </h6>
+              <input
+                type="number"
+                className="form-input"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <h6>
+                <label htmlFor="category">Category*</label>
+              </h6>
+              <select
+                name="category_id" // Changed from "category" to "category_id"
+                className="form-select"
+                value={formData.category_id}
+                onChange={handleChange} // Changed from handleChange to handleCategoryChange
+              >
+                <option value="">Select Category</option> // Added value
+                attribute
+                {categories.map((category) => (
+                  <option
+                    key={category.category_id}
+                    value={category.category_id}
                   >
-                    <img
-                      className="img"
-                      src={image.src ?? URL.createObjectURL(image)}
-                      alt={`Image ${index + 1}`}
-                    />
-                    <div className="delete_overlay">
-                      <img
-                        className="delete_icon"
-                        src={
-                          process.env.PUBLIC_URL + "/plus-svgrepo-com (1).png"
-                        }
-                        alt="Delete"
-                      />
-                    </div>
-                  </div>
+                    {category.category_name}
+                  </option>
                 ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <h6>
+                <label htmlFor="image">Images*</label>
+              </h6>
+              <div className="image-selector">
+                <input
+                  type="file"
+                  id="image-upload"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  hidden
+                />
+                <label htmlFor="image-upload">
+                  <i className="fas fa-plus"></i>
+                  <img className="rec_icon" src={imageIconPath} alt="Addy" />
+                </label>
+                <div className="selected-images">
+                  {images.map((image, index) => (
+                    <div
+                      key={index}
+                      className="img-ctn"
+                      onClick={() => handleImageDelete(image)}
+                    >
+                      <img
+                        className="img"
+                        src={image.src ?? URL.createObjectURL(image)}
+                        alt={`Image ${index + 1}`}
+                      />
+                      <div className="delete_overlay">
+                        <img
+                          className="delete_icon"
+                          src={
+                            process.env.PUBLIC_URL + "/plus-svgrepo-com (1).png"
+                          }
+                          alt="Delete"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       </div>
       <Footer />
     </main>
