@@ -7,7 +7,7 @@ export const fetchAdvertisements = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching advertisements:", error);
-    throw error; // Re-throw the error to handle it in the component if needed
+    throw error;
   }
 };
 
@@ -40,7 +40,7 @@ export const searchAdvertisements = async (name) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching advertisements:", error);
-    throw error; // Re-throw the error to handle it in the component if needed
+    throw error;
   }
 };
 export const fetchCategories = async () => {
@@ -51,7 +51,7 @@ export const fetchCategories = async () => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch categories:", error);
-    throw error; // Re-throw the error to handle it in the component if needed
+    throw error;
   }
 };
 export const findSimilars = async (cat_id, price, id) => {

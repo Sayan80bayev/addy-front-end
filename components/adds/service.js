@@ -5,16 +5,13 @@ export const showAdds = (advertisements) => {
     <div className="ctn">
       {advertisements.map((advertisement) => (
         <div key={advertisement.id} className="card-ctn">
-          <div className="card">
-            {/* Check if there are images */}
+          <div className="card add">
             {advertisement.images.length > 0 ? (
-              // Display the first image if available
               <img
                 src={`data:image/jpeg;base64,${advertisement.images[0].imageData}`}
                 alt={`First Image`}
               />
             ) : (
-              // Display a placeholder image if no images available
               <img
                 src={process.env.PUBLIC_URL + "/empty.jpg"}
                 alt={advertisement.title}

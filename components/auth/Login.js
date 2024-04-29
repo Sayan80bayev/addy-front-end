@@ -4,6 +4,9 @@ import axios from "axios";
 import "../style/App.css";
 
 export default function Login() {
+  var currentUrl = window.location.href;
+  var url = new URL(currentUrl);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,7 +15,6 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Check if email or password is empty
     if (!email || !password) {
       setMessage({
         status: "error",
@@ -85,6 +87,9 @@ export default function Login() {
           <br />
           {message?.status && (
             <p className="alert alert-danger">{message.message}</p>
+          )}
+          {url?.searchParams.has("out") && (
+            <p className="alert alert-success">Successfully logged out!</p>
           )}
         </form>
       </div>

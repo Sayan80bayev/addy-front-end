@@ -44,6 +44,7 @@ body {
 canvas {
   width: 100%;
 } 
+
 footer{
   display: flex;
   justify-content: space-evenly;
@@ -126,8 +127,13 @@ select option {
   text-decoration: none;
   color: aliceblue;
 }
-.card{
-  height: 320px;
+@keyframes bounce{
+  0%{transform: scale(1);}
+  30%{transform: scale(0.9);}
+  80%{transform: scale(1.1);}
+}
+.add{
+  height: 330px;
   min-height: 150px;
   border: #FF0084 solid 2px;
   border-radius: 20px;
@@ -136,13 +142,19 @@ select option {
   color: aliceblue;
   margin-bottom: 20px;
 }
-.card img{
+.add:active{
+  animation: bounce 0.4s ease;
+}
+.menu-button{
+  display: none;
+}
+.add > img{
   object-fit: cover;
-  height: 200px;
-  /* border: #FF0084 solid 2px; */
+  max-height: 200px;
+  min-height: 200px;
 }
 
-.card p, .card h5{
+.add p, .add h5{
   white-space: nowrap;
   overflow: hidden; /* Hide any content that overflows the container */
   text-overflow: ellipsis;
@@ -163,8 +175,20 @@ select option {
   gap: 6.5%;
   flex-wrap: wrap;
 }
-.ctn > .card-ctn{
-  width: 20%;
+@media screen and (min-width: 1024px) {
+  .ctn > .card-ctn{
+    width: 20%;
+  }
+}
+@media screen and (min-width: 768px) {
+  @media screen and (max-width: 1024px) {
+    .ctn > .card-ctn{
+      width: 30%;
+    }
+    .ctn{
+      gap: 5%;
+    }
+  }
 }
 a{
   text-decoration: none;
@@ -207,13 +231,16 @@ a{
 .hidden {
   display: none;
 }
+::-webkit-scrollbar{
+  width: 10px;
+}
  ::-webkit-scrollbar-track {
-  background-color: #FF0084; /* Color of the track */
+  background-color: #262622; /* Color of the track */
 }
 /* Customize scrollbar handle */
  ::-webkit-scrollbar-thumb {
-  background-color: #262622; /* Color of the scrollbar handle */
-  border-radius: 5px; /* Rounded corners */
+  background-color: #FF0084; /* Color of the scrollbar handle */
+  border-radius: 20px; /* Rounded corners */
 }
 
 /* Customize scrollbar corner */
@@ -221,23 +248,36 @@ a{
   background-color: #262622; /* Color of the scrollbar corner */
 }
 .slide{
-  background: rgba(200, 200, 200, 0.5); /* Change 0.5 to the desired opacity value between 0 (completely transparent) and 1 (completely opaque) */
-  overflow: hidden;
-  height: 500px;
-  width: 800px;
+  
+  max-height: 500px;
+  max-width: 800px;
   display: flex;
   align-items: center;
 }
 .carousel-inner{
+  margin: auto;
+  width: 90%;
+  background-color: #333333;
   display: flex;
   /* width: 700px; */
-  height: 500px;
+  height: 400px;
   align-items: center;
 
 }
+.carousel-control-next{
+  transform: translateX(50px);
+}
+.carousel-control-prev{
+  transform: translateX(-50px);
+}
 .carousel-item{
+  height: 100%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);  
-  height: max-content;
+  /* height: max-content; */
+}
+.carousel-item img{
+  height: 100%;
+  object-fit: contain;
 }
 .btn-no-style{
   background-color: transparent;
@@ -246,4 +286,83 @@ a{
 }
 .views img{
   height: 20px;
+}
+@media screen and (max-width: 767px) {
+  html, body{
+    width: 100vw;
+    overflow-x: hidden ;
+  }
+  /* Add your CSS rules here */
+  header{
+    width: 100%;
+  }
+  nav{
+    width: 100%;
+  }
+  nav div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .navigation{
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    position: absolute;
+    transform: translateX(999px) translateY(130px);
+    z-index: 1;
+    position:absolute;
+    background-color: rgb(38, 38, 34);
+    /* display: none; */
+  }
+  .disable{
+    transform: translateY(130px) translateX(-20px); 
+  }
+  /* Disable horizontal scrollbar in DevTools */
+::-webkit-scrollbar {
+  height: 0; /* Hide the scrollbar */
+}
+  main{
+    width: 100%;
+  }
+  footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #262622;
+    font-size: 25px;
+  }
+  .ctn{
+    flex-direction: column;
+  }
+  .card-ctn{
+    width: 100%;
+  }
+  .menu-button {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #FFFFFF;
+    margin: 5px 0;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .menu {
+    display: none;
+  }
+  
+  .menu.active {
+    display: block;
+  }
+  
+  
 }

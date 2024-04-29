@@ -7,15 +7,18 @@ import { fetchAddById } from "../api";
 import { Carousel } from "react-bootstrap";
 import { findSimilars } from "../api";
 import { simplifyTimestamp } from "./service";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function FullAdd() {
+  const location = useLocation();
   const { id } = useParams();
   const [add, setAdd] = useState(null);
   const [similars, setSimilars] = useState(null);
   const [email, setEmail] = useState("");
   const token = localStorage.getItem("authToken") ?? "";
   const navigate = useNavigate();
+  const [message, setMessage] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +44,6 @@ export default function FullAdd() {
   useEffect(() => {
     const findSimilarsAds = async () => {
       try {
-        // Ensure 'add' is not null and has a valid category
         if (add.id && add.category && add.category.category_id && add.price) {
           const data = await findSimilars(
             add.category.category_id,
@@ -55,6 +57,8 @@ export default function FullAdd() {
       }
     };
     findSimilarsAds();
+    setMessage(location.state);
+    console.log(message);
   }, [add]);
   const handleDelete = async () => {
     try {
@@ -82,10 +86,18 @@ export default function FullAdd() {
   const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
   return (
     <main>
-      <div className="ctn-full">
-        <div className="ctn children">
+      {message?.status == "success" && (
+        <h2 className="alert alert-info">{message.message}</h2>
+      )}
+      {message?.status == "error" && (
+        <h2 className="alert alert-danger">{message.message}</h2>
+      )}
+      {window.history.replaceState({}, "")}
+
+      <div className="ctn-full mb-4">
+        <div className="children">
           {add.images && add.images.length > 1 && (
-            <Carousel>
+            <Carousel className="mb-3">
               {add.images.map((imageObj, index) => (
                 <Carousel.Item key={index}>
                   <img
@@ -98,18 +110,22 @@ export default function FullAdd() {
             </Carousel>
           )}
           {add.images && add.images.length == 1 && (
-            <img
-              className="add_img"
-              src={base64ToUrl(add.images[0].imageData)}
-              alt="Contact"
-            />
+            <div className="img">
+              <img
+                className="add_img"
+                src={base64ToUrl(add.images[0].imageData)}
+                alt="Contact"
+              />
+            </div>
           )}
           {add.images && add.images.length === 0 && (
-            <img
-              className="add_img"
-              src={process.env.PUBLIC_URL + "/empty.jpg"}
-              alt="Contact"
-            />
+            <div className="img">
+              <img
+                className="add_img"
+                src={process.env.PUBLIC_URL + "/empty.jpg"}
+                alt="Contact"
+              />
+            </div>
           )}
           <h1
             style={{

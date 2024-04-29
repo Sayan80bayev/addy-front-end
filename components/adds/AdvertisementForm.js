@@ -7,6 +7,7 @@ import { fetchCategories, fetchAddById } from "../api";
 import { jwtDecode } from "jwt-decode";
 
 function AdvertisementForm({ isEditing }) {
+  const [isFormChanged, setFormChanged] = useState(false);
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const { id } = useParams();
@@ -35,7 +36,6 @@ function AdvertisementForm({ isEditing }) {
         };
         setFormData(formDataFromObject);
         const decodedFiles = adResponse.data.images.map((imageData) => {
-          // Assuming imageData.imageData is base64 encoded image data
           const byteCharacters = atob(imageData.imageData);
           const byteNumbers = new Array(byteCharacters.length);
           for (let i = 0; i < byteCharacters.length; i++) {
@@ -43,9 +43,8 @@ function AdvertisementForm({ isEditing }) {
           }
           const byteArray = new Uint8Array(byteNumbers);
 
-          // Set the type of the file to 'image/png' or your appropriate image type
           const file = new File([byteArray], imageData.fileName, {
-            type: "image/png", // or set it to the appropriate image type based on your data
+            type: "image/png",
           });
 
           return file;
@@ -63,6 +62,7 @@ function AdvertisementForm({ isEditing }) {
   }, []);
 
   const handleChange = (event) => {
+    setFormChanged(true);
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -71,6 +71,7 @@ function AdvertisementForm({ isEditing }) {
   };
 
   const handleImageChange = (e) => {
+    setFormChanged(true);
     const files = Array.from(e.target.files);
     const validImageExtensions = [".jpg", ".jpeg", ".png"];
 
@@ -94,12 +95,19 @@ function AdvertisementForm({ isEditing }) {
   };
 
   const handleImageDelete = (deletedImage) => {
+    setFormChanged(true);
+
     const filteredImages = images.filter((image) => image !== deletedImage);
     setImages(filteredImages);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!isFormChanged) {
+      setErrorMessage("No changes made to the form.");
+      return;
+    }
+
     const requiredFields = ["title", "description", "price", "category_id"];
     const emptyFields = requiredFields.filter((field) => !formData[field]);
 
@@ -107,9 +115,9 @@ function AdvertisementForm({ isEditing }) {
       setErrorMessage(`Please fill out all required fields`);
       return;
     }
+
     const formDataToSend = new FormData();
 
-    // Convert advertisement data to JSON string and append it as a Blob
     const advertisementData = {
       title: formData.title,
       description: formData.description,
@@ -152,7 +160,7 @@ function AdvertisementForm({ isEditing }) {
         );
       }
       console.log("Advertisement saved successfully:", response.data);
-      navigate("/index", {
+      navigate("/view/" + id, {
         state: {
           status: "success",
           message: "Advertisement saved successfully",
@@ -214,7 +222,6 @@ function AdvertisementForm({ isEditing }) {
                 onChange={handleChange}
                 style={{
                   whiteSpace: "pre-wrap",
-                  overflow: "hidden",
                   wordWrap: "break-word",
                   resize: "none",
                   height: "200px",
@@ -238,10 +245,10 @@ function AdvertisementForm({ isEditing }) {
                 <label htmlFor="category">Category*</label>
               </h6>
               <select
-                name="category_id" // Changed from "category" to "category_id"
+                name="category_id"
                 className="form-select"
                 value={formData.category_id}
-                onChange={handleChange} // Changed from handleChange to handleCategoryChange
+                onChange={handleChange}
               >
                 <option value="">Select Category</option> // Added value
                 attribute
@@ -299,6 +306,9 @@ function AdvertisementForm({ isEditing }) {
               </div>
             </div>
             <button type="submit">Submit</button>
+            <button onClick={() => navigate(-1)} className="scnd">
+              Back
+            </button>
           </form>
         </div>
       </div>

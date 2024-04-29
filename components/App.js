@@ -23,7 +23,6 @@ export default function App() {
       element: <Registration />,
     },
     {
-      path: "",
       element: <Template />,
       children: [
         {

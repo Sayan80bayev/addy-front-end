@@ -9,6 +9,7 @@ function AdvertisementList() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const data = await fetchAdvertisements();
         setAdvertisements(data);
