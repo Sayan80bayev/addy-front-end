@@ -168,20 +168,53 @@ select option {
 }
 .scrollable-container {
   overflow: auto;
-  /* height: 200px;  */
 }
 .ctn{
   display: flex;
   gap: 6.5%;
   flex-wrap: wrap;
 }
+.avatar-input{
+  height: 400px;
+  width: 400px;
+  object-fit: cover;
+  padding: 0;
+  margin: 0 50px 0 10px;
+}
+.avatar-input  .current-avatar{
+  align-self: center;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 400px;
+  height: 400px;
+}
 @media screen and (min-width: 1024px) {
   .ctn > .card-ctn{
     width: 20%;
   }
+  .avatar-input{
+    padding: 10px;
+    cursor: pointer;
+    background-color: #363632;
+    border-radius: 20px;
+    min-height: 430px;
+    min-width: max-content;
+  }
+  .current-avatar{
+    min-width: 400px;
+    min-height: 400px;
+  }
 }
 @media screen and (min-width: 768px) {
   @media screen and (max-width: 1024px) {
+    .avatar-input{
+      /* width: 50%; */
+      object-fit: cover;
+    }
+    .avatar-input .current-avatar{
+      border-radius: 50%;
+      /* width: 400px; */
+    }
     .ctn > .card-ctn{
       width: 30%;
     }
@@ -363,6 +396,29 @@ a{
   .menu.active {
     display: block;
   }
+}
   
-  
+.p-form{
+  align-items: center;
+  background-color: #363632;
+  border-radius: 20px;
+  padding: 20px;
+}
+.p-form > .form-controll {
+  margin-bottom: 10px;
+  align-self: center;
+  height: 35px;
+  /* width: 90%; */
+}
+.form-controll{
+  border-radius: 7px;
+}
+.p-form > label{
+  /* width: 90%; */
+  align-self: center;
+}
+.p-form button{
+  margin-top: 10px;
+  align-self: baseline;
+ width: 30%;
 }

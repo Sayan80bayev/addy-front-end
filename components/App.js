@@ -11,6 +11,7 @@ import SimilarAdds from "./adds/SimilarAdds";
 import AdvertisementForm from "./adds/AdvertisementForm";
 import Template from "./Template";
 import CategoryControll from "./admin/CategoryControll";
+import Profile from "./auth/Profile";
 
 export default function App() {
   const routes = createBrowserRouter([
@@ -25,6 +26,10 @@ export default function App() {
     {
       element: <Template />,
       children: [
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
         {
           path: "/newAdd",
           element: <AdvertisementForm isEditing={false} />,

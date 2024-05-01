@@ -7,6 +7,7 @@ main{
     height: 500px;
 }
 .add_img{
+    max-width: 100%;
     margin: auto;
     height: 100%;
     object-fit: contain;

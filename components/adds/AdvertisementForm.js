@@ -160,12 +160,21 @@ function AdvertisementForm({ isEditing }) {
         );
       }
       console.log("Advertisement saved successfully:", response.data);
-      navigate("/view/" + id, {
-        state: {
-          status: "success",
-          message: "Advertisement saved successfully",
-        },
-      });
+      if (isEditing) {
+        navigate(`/view/${id}`, {
+          state: {
+            status: "success",
+            message: "Advertisement saved successfully",
+          },
+        });
+      } else {
+        navigate("/index", {
+          state: {
+            status: "success",
+            message: "Advertisement saved successfully",
+          },
+        });
+      }
     } catch (error) {
       console.error("Failed to save advertisement:", error);
       setErrorMessage("Failed to save advertisement");
