@@ -422,3 +422,22 @@ a{
   align-self: baseline;
  width: 30%;
 }
+.custom-alert{
+  border: none;
+  border-left: 4px yellow solid;
+  background-color: rgb(255, 255, 0, .5);
+  color: #FFFFFF;
+}
+.custom-alert-red{
+  border: none;
+  border-left: 4px red solid;
+  background-color: rgb(255, 0, 0, .5);
+  color: #FFFFFF;
+}
+.custom-alert  p, h6{
+  padding: 0;
+  margin: 0;
+}
+.form-controll:disabled{
+  background-color: #AAAAAA;
+}
