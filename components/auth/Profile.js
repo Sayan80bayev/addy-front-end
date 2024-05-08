@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import Footer from "../Footer";
 import { jwtDecode } from "jwt-decode";
 import { getUserByEmail, updateUser } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
+
   const [imageUrl, setImageUrl] = useState();
   const [formData, setFormData] = useState({
     email: "",
@@ -12,8 +15,9 @@ const Profile = () => {
     password: "",
     confirmPassword: "",
   });
+
   const token = localStorage.getItem("authToken");
-  const [message, setMessage] = useState(""); // State for messages
+  const [message, setMessage] = useState("");
   const [avatarUpdated, setAvatarUpdated] = useState(false);
   useEffect(() => {
     const fetchUserByEmail = async (email) => {
@@ -28,6 +32,11 @@ const Profile = () => {
       }
     };
 
+    if (!localStorage.getItem("authToken")) {
+      return navigate("/login", {
+        state: { status: "error", message: "First you need to login!" },
+      });
+    }
     fetchUserByEmail(jwtDecode(token).sub);
   }, [token]);
 

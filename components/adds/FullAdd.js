@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import "../style/FullAdd.css";
 import Footer from "../Footer";
 import { jwtDecode } from "jwt-decode";
-import { fetchAddById } from "../api";
+import { fetchAddById, getUserByEmail } from "../api";
 import { Carousel } from "react-bootstrap";
 import { findSimilars } from "../api";
 import { simplifyTimestamp } from "./service";
@@ -19,12 +19,15 @@ export default function FullAdd() {
   const token = localStorage.getItem("authToken") ?? "";
   const navigate = useNavigate();
   const [message, setMessage] = useState();
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await fetchAddById(id);
+        const userData = await getUserByEmail(result.data.email);
         setAdd(result.data);
+        setUserData(userData);
       } catch (error) {
         console.error("Error fetching add:", error);
       }
@@ -176,7 +179,11 @@ export default function FullAdd() {
             <div className="ctn-profile">
               <h6>{add.email}</h6>
               <img
-                src="https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+                src={
+                  userData.avatar
+                    ? `data:image/jpeg;base64,${userData.avatar}`
+                    : "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+                }
                 alt="Profile"
               />
             </div>
