@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { subscribe, unsubscribe } from "../api";
-import { jwtDecode } from "jwt-decode"; // Removed destructuring as jwtDecode is a default export
+import { jwtDecode } from "jwt-decode";
 import { simplifyTimestamp } from "./utils"; // Separate utility functions
 
 export default function Adds({ advertisements }) {
