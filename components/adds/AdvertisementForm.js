@@ -21,7 +21,7 @@ function AdvertisementForm({ isEditing }) {
     category_id: "",
   });
   const navigate = useNavigate();
-
+  // Note: Fetching data for editing
   const fetchData = async () => {
     try {
       const data = await fetchCategories();
@@ -35,6 +35,8 @@ function AdvertisementForm({ isEditing }) {
           category_id: adResponse.data.category.category_id.toString() || "",
         };
         setFormData(formDataFromObject);
+
+        //Note  Decode images from base64 and set them
         const decodedFiles = adResponse.data.images.map((imageData) => {
           const byteCharacters = atob(imageData.imageData);
           const byteNumbers = new Array(byteCharacters.length);
@@ -50,6 +52,8 @@ function AdvertisementForm({ isEditing }) {
           return file;
         });
         setImages(decodedFiles);
+
+        //Note Set email for editing
         setEmail(adResponse.data.email);
       }
     } catch (error) {
@@ -77,7 +81,7 @@ function AdvertisementForm({ isEditing }) {
 
     const filteredImages = files.filter((file) => {
       if (!file.type || file.type === "") {
-        file.type = "image/png"; // Default to PNG if type is empty
+        file.type = "image/png"; // Note Default to PNG if type is empty
       }
 
       const extension = file.name.toLowerCase().slice(-4);
@@ -96,7 +100,6 @@ function AdvertisementForm({ isEditing }) {
 
   const handleImageDelete = (deletedImage) => {
     setFormChanged(true);
-
     const filteredImages = images.filter((image) => image !== deletedImage);
     setImages(filteredImages);
   };

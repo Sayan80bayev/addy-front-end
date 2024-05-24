@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { findSimilars } from "../api";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 
 function SimilarAdds() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -28,7 +28,7 @@ function SimilarAdds() {
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      <Adds advertisements={advertisements} />
     </>
   );
 }

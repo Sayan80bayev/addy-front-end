@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingIcon from "../LoadingIcon";
 import { fetchAdvertisements } from "../api";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -24,7 +24,7 @@ function AdvertisementList() {
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      <Adds advertisements={advertisements} />
     </>
   );
 }

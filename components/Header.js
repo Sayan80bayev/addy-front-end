@@ -51,6 +51,7 @@ const Header = () => {
             ) : (
               <a href="/login">Login</a>
             )}
+            {authorities && <a href="/profile">Profile</a>}
             {authorities === "ADMIN" && (
               <a href="/catControll">Controll categories</a>
             )}

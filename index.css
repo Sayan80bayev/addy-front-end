@@ -441,3 +441,24 @@ a{
 .form-controll:disabled{
   background-color: #AAAAAA;
 }
+.bell {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.bell-icon {
+  fill: #ffffff;
+  transition: fill 0.3s ease;
+}
+
+.bell.active .bell-icon {
+  fill: #ff0083;
+}
+
+.card-info > h5{
+  display: flex;
+  justify-content: space-between;
+}
+

@@ -75,7 +75,12 @@ export const getUserByEmail = async (email) => {
     throw error;
   }
 };
-export const updateUser = async (userData, avatarDataUrl, avatarUpdated) => {
+export const updateUser = async (
+  userData,
+  avatarDataUrl,
+  avatarUpdated,
+  token
+) => {
   try {
     const formData = new FormData();
     const userDataBlob = new Blob([JSON.stringify(userData)], {
@@ -88,7 +93,7 @@ export const updateUser = async (userData, avatarDataUrl, avatarUpdated) => {
       const blob = await fetch(avatarDataUrl).then((res) => res.blob()); // Fetch avatar image and convert to blob
       formData.append("avatar", blob, "avatar.png");
     } else {
-      formData.append("avatar", new Blob(null));
+      formData.append("avatar", new Blob());
     }
 
     const response = await axios.put(
@@ -96,6 +101,7 @@ export const updateUser = async (userData, avatarDataUrl, avatarUpdated) => {
       formData,
       {
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       }
@@ -103,5 +109,40 @@ export const updateUser = async (userData, avatarDataUrl, avatarUpdated) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+export const subscribe = async (email, id, token) => {
+  const formData = {
+    id: id,
+    email: email,
+  };
+  try {
+    const response = await axios.post("http://localhost:3001/subs", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return "SUCCESS";
+  } catch (error) {
+    return "ERROR";
+  }
+};
+export const unsubscribe = async (email, id, token) => {
+  const formData = {
+    id: id,
+    email: email,
+  };
+  console.log(token);
+  try {
+    const response = await axios.delete("http://localhost:3001/subs", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: formData, // include the request body here
+    });
+    return "SUCCESS";
+  } catch (error) {
+    console.log(error);
+    return "ERROR";
   }
 };

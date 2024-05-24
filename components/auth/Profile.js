@@ -77,7 +77,8 @@ const Profile = () => {
       const response = await updateUser(
         updatedFormData,
         imageUrl,
-        avatarUpdated
+        avatarUpdated,
+        token
       );
       setMessage("Profile updated successfully");
       console.log(response);

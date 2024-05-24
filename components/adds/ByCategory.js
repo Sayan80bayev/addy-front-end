@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { fetchAdvertisementsByCat } from "../api";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -29,7 +29,8 @@ function AdvertisementList() {
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      // Inside your parent component
+      <Adds advertisements={advertisements} />
     </>
   );
 }

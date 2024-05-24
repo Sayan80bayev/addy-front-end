@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { fetchAddById, getUserByEmail } from "../api";
 import { Carousel } from "react-bootstrap";
 import { findSimilars } from "../api";
-import { simplifyTimestamp } from "./service";
+import { simplifyTimestamp } from "./utils";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 

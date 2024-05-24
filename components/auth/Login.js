@@ -32,7 +32,6 @@ export default function Login() {
       );
       if (response.data != null) {
         localStorage.setItem("authToken", response.data.token);
-        console.log(localStorage.getItem("authToken"));
         return navigate("/index");
       } else {
         setMessage({
