@@ -85,7 +85,14 @@ export default function FullAdd() {
   if (!add) {
     return <div></div>;
   }
-
+  const renderCategories = (category) => {
+    return (
+      <>
+        {category.parent && renderCategories(category.parent)}
+        <p key={category.category_id}>{category.category_name}</p>
+      </>
+    );
+  };
   const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
   return (
     <main>
@@ -157,14 +164,7 @@ export default function FullAdd() {
             />
             Categories:
           </h6>
-          <p>{add.category && add.category.category_name}</p>{" "}
-          <div className="views">
-            <img
-              className="rec_icon "
-              src={process.env.PUBLIC_URL + "/view-eye-svgrepo-com.png"}
-            />
-            <h6 style={{ display: "block" }}>{add.views}</h6>
-          </div>
+          {add.category && renderCategories(add.category)}
         </div>
         <div className="ctn-additional">
           <div className="ctn-p-profile">
