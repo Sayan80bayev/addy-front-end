@@ -29,7 +29,6 @@ function AdvertisementList() {
   return (
     <>
       {loading && <LoadingIcon />}
-      // Inside your parent component
       <Adds advertisements={advertisements} />
     </>
   );
