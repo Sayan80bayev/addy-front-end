@@ -11,8 +11,10 @@ function AdvertisementList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setAdvertisements([]);
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetchAdvertisementsByCat(id);
         if (response.data.length === 0) return navigate("/index");
         setAdvertisements(response.data);
