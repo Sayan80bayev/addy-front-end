@@ -434,6 +434,12 @@ a{
   background-color: rgb(255, 0, 0, .5);
   color: #FFFFFF;
 }
+.custom-alert-green{
+  border: none;
+  border-left: 4px rgb(100, 255, 100) solid;
+  background-color: rgb(100, 255, 100, .3);
+  color: #FFFFFF;
+}
 .custom-alert  p, h6{
   padding: 0;
   margin: 0;
