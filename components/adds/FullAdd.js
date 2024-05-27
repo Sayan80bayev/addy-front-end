@@ -87,10 +87,12 @@ export default function FullAdd() {
   }
   const renderCategories = (category) => {
     return (
-      <>
+      <div style={{ display: "flex", gap: "15px" }}>
         {category.parent && renderCategories(category.parent)}
-        <p key={category.category_id}>{category.category_name}</p>
-      </>
+        <p className="category mt-2" key={category.category_id}>
+          {category.category_name}
+        </p>
+      </div>
     );
   };
   const base64ToUrl = (base64) => `data:image/jpeg;base64,${base64}`;
