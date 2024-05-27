@@ -92,12 +92,14 @@ export default function Adds({ advertisements }) {
                   >
                     {advertisement.title}
                   </Link>
-                  <BellButton
-                    className={`bell ${
-                      isSubscribed ? "active" : "not-subscribed"
-                    }`}
-                    onClick={(e) => handleBellClick(e, advertisement.id)}
-                  ></BellButton>
+                  {token && email != advertisement.email && (
+                    <BellButton
+                      className={`bell ${
+                        isSubscribed ? "active" : "not-subscribed"
+                      }`}
+                      onClick={(e) => handleBellClick(e, advertisement.id)}
+                    ></BellButton>
+                  )}
                 </h5>
                 <p className="price">
                   <b>{advertisement.price}</b>
