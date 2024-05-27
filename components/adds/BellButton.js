@@ -9,7 +9,7 @@ export default function BellButton({ onClick, className }) {
         Math.pow(event.clientY - centerY, 2)
     );
 
-    if (distance <= rect.width / 2 + 10) {
+    if (distance <= rect.width / 2 + 20) {
       onClick(event);
     }
   };

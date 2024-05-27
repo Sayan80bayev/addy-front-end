@@ -146,3 +146,29 @@ export const unsubscribe = async (email, id, token) => {
     return "ERROR";
   }
 };
+export const fetchNotifications = async (token) => {
+  try {
+    const response = await axios.get(`http://localhost:3001/notes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return "ERROR";
+  }
+};
+export const seenNotifications = async (token, formData) => {
+  try {
+    const response = await axios.post(`http://localhost:3001/notes`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return "ERROR";
+  }
+};

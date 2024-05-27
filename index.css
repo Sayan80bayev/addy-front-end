@@ -461,4 +461,29 @@ a{
   display: flex;
   justify-content: space-between;
 }
-
+.notification-menu {
+  
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 150px ;
+  min-width: 500px ;
+  position: absolute; /* Position relative to the bell button */
+  left: 50%; 
+  top : 80px;
+  background-color: #262622;
+  z-index: 10; /* Ensure it's on top of other elements */
+  /* Add more styles (width, padding, etc.) as needed */
+}
+.notification-menu div {
+  display: flex;
+  justify-content: space-between;
+}
+.notes-quantity{
+  background-color: #FF0084;
+  border-radius: 50%;
+  font-size: 10px;
+  height: max-content;
+  width: 15px;
+  position: relative;
+  left: -25px;
+}
