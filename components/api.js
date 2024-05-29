@@ -1,9 +1,22 @@
 import axios from "axios";
 
+// api.js
+
 export const fetchAdvertisements = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3001/api/v1/public/getAdds"
+      `http://localhost:3001/api/v1/public/getAdds`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching advertisements:", error);
+    throw error;
+  }
+};
+export const fetchAdvertisementsWithSort = async (sortCriteria) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3001/api/v1/public/sort/${sortCriteria}`
     );
     return response.data;
   } catch (error) {

@@ -493,3 +493,12 @@ a{
   position: relative;
   left: -25px;
 }
+.sort select{
+  background-color: #434343;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 5px;
+  height: max-content;
+  width: max-content;
+  padding: 5px;
+}
