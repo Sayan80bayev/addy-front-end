@@ -10,7 +10,12 @@ function AdvertisementList() {
   const [loading, setLoading] = useState(false);
   const [sortCriteria, setSortCriteria] = useState(null); // default sorting by date
   // const [getAdds, { isError }] = useGetAddsQuery();
-  const { advertisements = [] } = useGetAddsQuery();
+  const {
+    data: advertisements = [],
+    error,
+    isLoading,
+    refetch,
+  } = useGetAddsQuery();
 
   useEffect(() => {
     if (sortCriteria !== null) {
@@ -47,7 +52,7 @@ function AdvertisementList() {
   const handleSort = (criteria) => {
     setSortCriteria(criteria);
   };
-
+  console.log(advertisements);
   return (
     <>
       <Sorting onSort={handleSort} />
