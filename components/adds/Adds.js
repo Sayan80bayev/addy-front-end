@@ -61,7 +61,12 @@ export default function Adds({ advertisements }) {
     }
     setChanged(true);
   };
-
+  function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength - 3) + "...";
+    }
+    return text;
+  }
   return (
     <div className="ctn">
       {advertisements.map((advertisement) => {
@@ -85,14 +90,14 @@ export default function Adds({ advertisements }) {
                 />
               )}
               <div className="card-info">
-                <h5>
+                <h5 key={advertisement.id}>
                   <Link
                     to={"/view/" + advertisement.id}
                     className="link_to_full"
                   >
                     {advertisement.title}
                   </Link>
-                  {token && email != advertisement.email && (
+                  {token && email !== advertisement.email && (
                     <BellButton
                       className={`bell ${
                         isSubscribed ? "active" : "not-subscribed"
