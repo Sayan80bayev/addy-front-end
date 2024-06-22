@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { advertisementApi } from "./advertismentApi";
-
+import { advertisementApi } from "./advertismentAPI";
 export const store = configureStore({
   reducer: {
     [advertisementApi.reducerPath]: advertisementApi.reducer,
