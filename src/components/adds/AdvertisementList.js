@@ -4,7 +4,7 @@ import LoadingIcon from "../LoadingIcon";
 import { fetchAdvertisements, fetchAdvertisementsWithSort } from "../api"; // предполагается, что fetchAdvertisements принимает параметр сортировки
 import Adds from "./Adds";
 import Sorting from "../Sorting";
-import { useGetAddsQuery } from "../../store/advertismentApi";
+import { useGetAddsQuery } from "../../store/advertismentAPI";
 function AdvertisementList() {
   // const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(false);

@@ -15,6 +15,16 @@ export const advertisementApi = createApi({
             ]
           : [{ type: "Advertisements", id: "LIST" }],
     }),
+    postAdds: build.query({
+      query: () => "api/v1/public/getAdds",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Advertisements", id })),
+              { type: "Advertisements", id: "LIST" },
+            ]
+          : [{ type: "Advertisements", id: "LIST" }],
+    }),
   }),
 });
 
