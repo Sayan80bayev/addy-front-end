@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate("/index/search/" + search);
+  };
+
   return (
-    <div className="search_super">
+    <form onSubmit={handleSubmit} className="search_super">
       <input
         type="text"
         className="search-inp"
@@ -19,8 +25,8 @@ const SearchBar = () => {
         value={search}
         onChange={handleInputChange}
       />
-      <Link
-        to={"/index/search/" + search}
+      <button
+        type="submit"
         id="search-btn"
         style={{
           display: "flex",
@@ -32,9 +38,9 @@ const SearchBar = () => {
           justifyContent: "center",
         }}
       >
-        <>Search</>
-      </Link>
-    </div>
+        Search
+      </button>
+    </form>
   );
 };
 

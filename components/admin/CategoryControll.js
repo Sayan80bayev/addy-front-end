@@ -10,6 +10,8 @@ const CategoryControll = () => {
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState("");
   const [categories, setCategories] = useState([]);
+  const [parentCategory, setParentCategory] = useState(null); // New state for parent category
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -26,15 +28,27 @@ const CategoryControll = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/cat/add",
-        { category_name: formData },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      if (parentCategory == null) {
+        const response = await axios.post(
+          "http://localhost:3001/api/cat/add",
+          { category_name: formData },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        const response = await axios.post(
+          `http://localhost:3001/api/cat/${parentCategory}/subcategories`,
+          { category_name: formData },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
       setMessage({ status: "success", message: "Successfully added!" });
     } catch (error) {
       setMessage({ status: "error", message: "Error occured!" });
@@ -113,6 +127,22 @@ const CategoryControll = () => {
                 value={formData}
                 onChange={(e) => setFormData(e.target.value)}
               />
+              <label>Parent category (optional)</label>
+
+              <select
+                value={parentCategory || ""}
+                onChange={(e) => setParentCategory(e.target.value || null)}
+              >
+                <option value="">None</option>
+                {categories.map((category) => (
+                  <option
+                    key={category.category_id}
+                    value={category.category_id}
+                  >
+                    {category.category_name}
+                  </option>
+                ))}
+              </select>
               <button type="submit" className="mt-2" onClick={handleSubmit}>
                 Submit
               </button>

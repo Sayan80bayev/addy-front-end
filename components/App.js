@@ -9,9 +9,9 @@ import FullAdd from "./adds/FullAdd";
 import SearchAd from "./adds/SearchAd";
 import SimilarAdds from "./adds/SimilarAdds";
 import AdvertisementForm from "./adds/AdvertisementForm";
-import EditAdvertisement from "./adds/EditAdvertisement";
 import Template from "./Template";
 import CategoryControll from "./admin/CategoryControll";
+import Profile from "./auth/Profile";
 
 export default function App() {
   const routes = createBrowserRouter([
@@ -24,9 +24,12 @@ export default function App() {
       element: <Registration />,
     },
     {
-      path: "",
       element: <Template />,
       children: [
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
         {
           path: "/newAdd",
           element: <AdvertisementForm isEditing={false} />,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { findSimilars } from "../api";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 
 function SimilarAdds() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -11,24 +11,24 @@ function SimilarAdds() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Set loading to true when fetching data
+      setLoading(true);
       try {
         const data = await findSimilars(cat_id, price, id);
         setAdvertisements(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [id, cat_id, price]); // Make sure to include parameters in the dependency array
+  }, [id, cat_id, price]);
 
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      <Adds advertisements={advertisements} />
     </>
   );
 }

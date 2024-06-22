@@ -2,14 +2,26 @@ import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../style/App.css";
+
 export default function Login() {
+  var currentUrl = window.location.href;
+  var url = new URL(currentUrl);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const [message, setMessage] = useState(location.state);
+  const [message, setMessage] = useState(location.state || "");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setMessage({
+        status: "error",
+        message: "Email and password are required",
+      });
+      return;
+    }
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/auth/authenticate",
@@ -20,7 +32,6 @@ export default function Login() {
       );
       if (response.data != null) {
         localStorage.setItem("authToken", response.data.token);
-        console.log(localStorage.getItem("authToken"));
         return navigate("/index");
       } else {
         setMessage({
@@ -44,7 +55,6 @@ export default function Login() {
           <div className="field">
             <input
               type="text"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -53,7 +63,6 @@ export default function Login() {
           <div className="field">
             <input
               type="password"
-              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -77,6 +86,9 @@ export default function Login() {
           <br />
           {message?.status && (
             <p className="alert alert-danger">{message.message}</p>
+          )}
+          {url?.searchParams.has("out") && (
+            <p className="alert alert-success">Successfully logged out!</p>
           )}
         </form>
       </div>

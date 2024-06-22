@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { fetchAdvertisementsByCat } from "../api";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 
 function AdvertisementList() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -11,8 +11,10 @@ function AdvertisementList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setAdvertisements([]);
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetchAdvertisementsByCat(id);
         if (response.data.length === 0) return navigate("/index");
         setAdvertisements(response.data);
@@ -29,7 +31,7 @@ function AdvertisementList() {
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      <Adds advertisements={advertisements} />
     </>
   );
 }

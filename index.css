@@ -44,6 +44,7 @@ body {
 canvas {
   width: 100%;
 } 
+
 footer{
   display: flex;
   justify-content: space-evenly;
@@ -122,12 +123,21 @@ select option {
   background-position: left center;
   padding-left: 20px; /* Adjust padding to make room for the marker */
 }
-.link_to_full{
-  text-decoration: none;
-  color: aliceblue;
+.link_to_full {
+  display: block; /* Ensures the link is treated as a block-level element */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* Adjust the width as needed */
+  flex-shrink: 1; /* Allows the link to shrink if needed */
 }
-.card{
-  height: 320px;
+@keyframes bounce{
+  0%{transform: scale(1);}
+  30%{transform: scale(0.9);}
+  80%{transform: scale(1.1);}
+}
+.add{
+  height: 330px;
   min-height: 150px;
   border: #FF0084 solid 2px;
   border-radius: 20px;
@@ -136,18 +146,25 @@ select option {
   color: aliceblue;
   margin-bottom: 20px;
 }
-.card img{
+.add:active{
+  animation: bounce 0.4s ease;
+}
+.menu-button{
+  display: none;
+}
+.add > img{
   object-fit: cover;
-  height: 200px;
-  /* border: #FF0084 solid 2px; */
+  max-height: 200px;
+  min-height: 200px;
 }
 
-.card p, .card h5{
+.add p, .add h5{
   white-space: nowrap;
   overflow: hidden; /* Hide any content that overflows the container */
   text-overflow: ellipsis;
 }
 .card-info{
+  
   height: 130px;
   padding: 20px;
 }
@@ -156,15 +173,60 @@ select option {
 }
 .scrollable-container {
   overflow: auto;
-  /* height: 200px;  */
 }
 .ctn{
   display: flex;
   gap: 6.5%;
   flex-wrap: wrap;
 }
-.ctn > .card-ctn{
-  width: 20%;
+.avatar-input{
+  height: 400px;
+  width: 400px;
+  object-fit: cover;
+  padding: 0;
+  margin: 0 50px 0 10px;
+}
+.avatar-input  .current-avatar{
+  align-self: center;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 400px;
+  height: 400px;
+}
+@media screen and (min-width: 1024px) {
+  .ctn > .card-ctn{
+    width: 20%;
+  }
+  .avatar-input{
+    padding: 10px;
+    cursor: pointer;
+    background-color: #363632;
+    border-radius: 20px;
+    min-height: 430px;
+    min-width: max-content;
+  }
+  .current-avatar{
+    min-width: 400px;
+    min-height: 400px;
+  }
+}
+@media screen and (min-width: 768px) {
+  @media screen and (max-width: 1024px) {
+    .avatar-input{
+      /* width: 50%; */
+      object-fit: cover;
+    }
+    .avatar-input .current-avatar{
+      border-radius: 50%;
+      /* width: 400px; */
+    }
+    .ctn > .card-ctn{
+      width: 30%;
+    }
+    .ctn{
+      gap: 5%;
+    }
+  }
 }
 a{
   text-decoration: none;
@@ -207,13 +269,16 @@ a{
 .hidden {
   display: none;
 }
+::-webkit-scrollbar{
+  width: 10px;
+}
  ::-webkit-scrollbar-track {
-  background-color: #FF0084; /* Color of the track */
+  background-color: #262622; /* Color of the track */
 }
 /* Customize scrollbar handle */
  ::-webkit-scrollbar-thumb {
-  background-color: #262622; /* Color of the scrollbar handle */
-  border-radius: 5px; /* Rounded corners */
+  background-color: #FF0084; /* Color of the scrollbar handle */
+  border-radius: 20px; /* Rounded corners */
 }
 
 /* Customize scrollbar corner */
@@ -221,23 +286,36 @@ a{
   background-color: #262622; /* Color of the scrollbar corner */
 }
 .slide{
-  background: rgba(200, 200, 200, 0.5); /* Change 0.5 to the desired opacity value between 0 (completely transparent) and 1 (completely opaque) */
-  overflow: hidden;
-  height: 500px;
-  width: 800px;
+  
+  max-height: 500px;
+  max-width: 800px;
   display: flex;
   align-items: center;
 }
 .carousel-inner{
+  margin: auto;
+  width: 90%;
+  background-color: #333333;
   display: flex;
   /* width: 700px; */
-  height: 500px;
+  height: 400px;
   align-items: center;
 
 }
+.carousel-control-next{
+  transform: translateX(50px);
+}
+.carousel-control-prev{
+  transform: translateX(-50px);
+}
 .carousel-item{
+  height: 100%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);  
-  height: max-content;
+  /* height: max-content; */
+}
+.carousel-item img{
+  height: 100%;
+  object-fit: contain;
 }
 .btn-no-style{
   background-color: transparent;
@@ -246,4 +324,187 @@ a{
 }
 .views img{
   height: 20px;
+}
+@media screen and (max-width: 767px) {
+  html, body{
+    width: 100vw;
+    overflow-x: hidden ;
+  }
+  /* Add your CSS rules here */
+  header{
+    width: 100%;
+  }
+  nav{
+    width: 100%;
+  }
+  nav div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .navigation{
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    position: absolute;
+    transform: translateX(999px) translateY(130px);
+    z-index: 1;
+    position:absolute;
+    background-color: rgb(38, 38, 34);
+    /* display: none; */
+  }
+  .disable{
+    transform: translateY(130px) translateX(-20px); 
+  }
+  /* Disable horizontal scrollbar in DevTools */
+::-webkit-scrollbar {
+  height: 0; /* Hide the scrollbar */
+}
+  main{
+    width: 100%;
+  }
+  footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #262622;
+    font-size: 25px;
+  }
+  .ctn{
+    flex-direction: column;
+  }
+  .card-ctn{
+    width: 100%;
+  }
+  .menu-button {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #FFFFFF;
+    margin: 5px 0;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .menu {
+    display: none;
+  }
+  
+  .menu.active {
+    display: block;
+  }
+}
+  
+.p-form{
+  align-items: center;
+  background-color: #363632;
+  border-radius: 20px;
+  padding: 20px;
+}
+.p-form > .form-controll {
+  margin-bottom: 10px;
+  align-self: center;
+  height: 35px;
+  /* width: 90%; */
+}
+.form-controll{
+  border-radius: 7px;
+}
+.p-form > label{
+  /* width: 90%; */
+  align-self: center;
+}
+.p-form button{
+  margin-top: 10px;
+  align-self: baseline;
+ width: 30%;
+}
+.custom-alert{
+  border: none;
+  border-left: 4px yellow solid;
+  background-color: rgb(255, 255, 0, .5);
+  color: #FFFFFF;
+}
+.custom-alert-red{
+  border: none;
+  border-left: 4px red solid;
+  background-color: rgb(255, 0, 0, .5);
+  color: #FFFFFF;
+}
+.custom-alert-green{
+  border: none;
+  border-left: 4px rgb(100, 255, 100) solid;
+  background-color: rgb(100, 255, 100, .3);
+  color: #FFFFFF;
+}
+.custom-alert  p, h6{
+  padding: 0;
+  margin: 0;
+}
+.form-controll:disabled{
+  background-color: #AAAAAA;
+}
+.bell {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.bell-icon {
+  fill: #ffffff;
+  transition: fill 0.3s ease;
+}
+
+.bell.active .bell-icon {
+  fill: #ff0083;
+}
+
+.card-info > h5{
+  display: flex;
+  justify-content: space-between;
+}
+
+.notification-menu {
+  
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 150px ;
+  min-width: 500px ;
+  position: absolute; /* Position relative to the bell button */
+  left: 50%; 
+  top : 80px;
+  background-color: #262622;
+  z-index: 10; /* Ensure it's on top of other elements */
+  /* Add more styles (width, padding, etc.) as needed */
+}
+.notification-menu div {
+  display: flex;
+  justify-content: space-between;
+}
+.notes-quantity{
+  background-color: #FF0084;
+  border-radius: 50%;
+  font-size: 10px;
+  height: max-content;
+  width: 15px;
+  position: relative;
+  left: -25px;
+}
+.sort select{
+  background-color: #434343;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 5px;
+  height: max-content;
+  width: max-content;
+  padding: 5px;
 }

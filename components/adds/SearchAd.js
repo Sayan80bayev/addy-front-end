@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { showAdds } from "./service";
+import Adds from "./Adds";
 import LoadingIcon from "../LoadingIcon";
 import { searchAdvertisements } from "../api";
 
@@ -26,7 +26,7 @@ function AdvertisementList() {
   return (
     <>
       {loading && <LoadingIcon />}
-      {showAdds(advertisements)}
+      <Adds advertisements={advertisements} />
     </>
   );
 }
