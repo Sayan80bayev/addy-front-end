@@ -9,7 +9,6 @@ function AdvertisementList() {
   // const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortCriteria, setSortCriteria] = useState(null); // default sorting by date
-  // const [getAdds, { isError }] = useGetAddsQuery();
   const {
     data: advertisements = [],
     error,
