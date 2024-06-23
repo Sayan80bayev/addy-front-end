@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuthenticateUserMutation } from "../../store/api/authenticationApi";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import "../style/App.css";
 
 export default function Login() {
   var currentUrl = window.location.href;
   var url = new URL(currentUrl);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState(new FormData());
+  const [authenticateUser] = useAuthenticateUserMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [message, setMessage] = useState(location.state || "");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!formData.email || !formData.password) {
       setMessage({
         status: "error",
         message: "Email and password are required",
@@ -23,15 +26,10 @@ export default function Login() {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/auth/authenticate",
-        {
-          email: email,
-          password: password,
-        }
-      );
-      if (response.data != null) {
-        localStorage.setItem("authToken", response.data.token);
+      const response = await authenticateUser(formData).unwrap();
+      if (response.token) {
+        console.log(response.token);
+        localStorage.setItem("authToken", response.token);
         return navigate("/index");
       } else {
         setMessage({
@@ -46,6 +44,13 @@ export default function Login() {
       });
     }
   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
 
   return (
     <>
@@ -54,17 +59,19 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <div className="field">
             <input
+              name="email"
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleInputChange}
             />
             <label>Email Address</label>
           </div>
           <div className="field">
             <input
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleInputChange}
             />
             <label>Password</label>
           </div>

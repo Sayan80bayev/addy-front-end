@@ -1,2 +1,2 @@
 export * from "./store";
-export * from "./advertismentAPI";
+export * from "./api/advertismentApi";
